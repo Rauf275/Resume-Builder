@@ -1,0 +1,21 @@
+.tpl-elegant { text-align: center; }
+.eleg-header { margin-bottom: 26px; }
+.eleg-photo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; margin: 0 auto 14px; display: block; }
+.eleg-name { font-family: var(--res-font); font-weight: 400; font-size: calc(32px * var(--res-heading-scale)); letter-spacing: .02em; }
+.eleg-title { font-style: italic; color: var(--res-accent); margin-top: 4px; font-family: var(--res-font); }
+.eleg-rule { width: 60px; height: 1px; background: #ccc; margin: 14px auto; }
+.eleg-contacts { font-size: .78em; color: #999; letter-spacing: .03em; }
+.eleg-block { margin-bottom: 24px; text-align: left; }
+.eleg-h.res-section-title { text-align: center; margin-bottom: 14px; }
+.eleg-h.res-section-title span {
+  font-family: var(--res-font); font-style: italic; font-size: calc(15px * var(--res-heading-scale));
+  color: var(--res-secondary); position: relative; padding: 0 16px;
+}
+.eleg-h.res-section-title::before, .eleg-h.res-section-title::after {
+  content: ''; display: inline-block; width: 40px; height: 1px; background: #ddd; vertical-align: middle;
+}
+.eleg-about { font-size: .95em; color: #3a3a3a; text-align: center; max-width: 65ch; margin: 0 auto; }
+.tpl-elegant .res-item-top { justify-content: center; gap: 14px; }
+.tpl-elegant .res-item { text-align: center; }
+.tpl-elegant .res-tags { justify-content: center; }
+.tpl-elegant .res-lang-item { justify-content: center; gap: 10px; }

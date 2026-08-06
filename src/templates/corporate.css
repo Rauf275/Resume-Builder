@@ -1,0 +1,21 @@
+.tpl-corporate { }
+.corp-bar {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
+  padding: 26px 30px; background: var(--res-secondary); color: #fff;
+  border-bottom: 5px solid var(--res-accent);
+}
+.corp-name { font-family: var(--font-body); font-size: calc(25px * var(--res-heading-scale)); font-weight: 800; color: #fff; }
+.corp-title { margin-top: 3px; color: var(--res-accent); font-weight: 600; font-size: .9em; }
+.corp-contacts { text-align: right; font-size: .76em; line-height: 1.7; opacity: .9; }
+.corp-grid { display: grid; gap: 0; }
+.corp-main { padding: 26px 30px; border-right: 1px solid #eee; }
+.corp-side { padding: 26px 22px; background: #FAFAF8; }
+.corp-block { margin-bottom: 20px; }
+.corp-h.res-section-title {
+  font-size: calc(12.5px * var(--res-heading-scale)); text-transform: uppercase; letter-spacing: .09em;
+  font-weight: 800; color: var(--res-secondary); margin-bottom: 10px;
+  padding-bottom: 5px; border-bottom: 2px solid var(--res-secondary);
+}
+.corp-about { font-size: .94em; color: #3a3a3a; }
+
+

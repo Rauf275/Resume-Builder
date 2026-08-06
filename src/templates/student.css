@@ -1,0 +1,18 @@
+.tpl-student { }
+.stu-header { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+.stu-photo { width: 86px; height: 86px; border-radius: 18px; object-fit: cover; }
+.stu-name { font-family: var(--res-font); font-size: calc(25px * var(--res-heading-scale)); }
+.stu-title { color: var(--res-accent); font-weight: 600; margin-top: 2px; }
+.stu-contacts { font-size: .78em; color: #888; margin-top: 6px; }
+.stu-block { margin-bottom: 20px; }
+.stu-h.res-section-title {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: calc(13px * var(--res-heading-scale)); font-weight: 700; color: var(--res-secondary);
+  margin-bottom: 10px;
+}
+.stu-h.res-section-title::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--res-accent); display: inline-block;
+}
+.stu-about { font-size: .95em; color: #3a3a3a; }
+.tpl-student .res-tag { border-radius: 8px; }
+.tpl-student .res-item { background: #FAFAF8; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }

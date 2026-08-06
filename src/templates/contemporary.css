@@ -1,0 +1,22 @@
+.tpl-contemporary { }
+.cont-banner {
+  text-align: center; padding: 34px 30px 24px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--res-accent) 10%, white), white);
+  border-bottom: 1px solid #eee;
+}
+.cont-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; display: block; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+.cont-name { font-family: var(--res-font); font-size: calc(28px * var(--res-heading-scale)); }
+.cont-title { color: var(--res-accent); font-weight: 700; margin-top: 4px; letter-spacing: .02em; }
+.cont-contacts { margin-top: 10px; font-size: .78em; color: #888; }
+.cont-grid { display: grid; }
+.cont-main { padding: 26px 30px; }
+.cont-side { padding: 26px 22px; border-left: 1px solid #eee; }
+.cont-block { margin-bottom: 20px; }
+.cont-h.res-section-title {
+  font-size: calc(13px * var(--res-heading-scale)); font-weight: 700; color: #222;
+  display: inline-block; margin-bottom: 12px; padding-bottom: 4px;
+  border-bottom: 3px solid var(--res-accent);
+}
+.cont-about { font-size: .95em; color: #3a3a3a; }
+
+

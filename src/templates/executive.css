@@ -1,0 +1,15 @@
+.tpl-executive { }
+.exec-header { border-bottom: 3px double var(--res-secondary); padding-bottom: 16px; margin-bottom: 24px; }
+.exec-header-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+.exec-name { font-family: var(--res-font); font-size: calc(32px * var(--res-heading-scale)); color: var(--res-secondary); }
+.exec-contacts { text-align: right; font-size: .78em; color: #555; line-height: 1.7; }
+.exec-title { margin-top: 6px; letter-spacing: .1em; text-transform: uppercase; font-size: .85em; color: var(--res-accent); font-weight: 700; }
+.exec-block { margin-bottom: 20px; }
+.exec-about { font-size: .97em; color: #333; font-style: italic; }
+.exec-title-h.res-section-title {
+  font-family: var(--res-font);
+  font-size: calc(16px * var(--res-heading-scale));
+  color: var(--res-secondary);
+  margin-bottom: 10px;
+}
+.tpl-executive .res-item-sub { color: var(--res-secondary); }

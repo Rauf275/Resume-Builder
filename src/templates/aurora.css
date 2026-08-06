@@ -1,0 +1,48 @@
+.aur-grid { display: grid; min-height: 297mm; }
+.aur-side {
+  background: color-mix(in srgb, var(--res-accent) 8%, #fff);
+  border-right: 1px solid color-mix(in srgb, var(--res-accent) 22%, #fff);
+  padding: 34px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+}
+
+/* Photo sized to feel like the focal point of the header without dominating the sidebar —
+   large enough to read clearly, with an accent-colored ring for a polished, framed look.
+   Solid fill (not a gradient/mix) so the ring always matches the exact picked color. */
+.aur-photo-ring {
+  width: 128px; height: 128px; border-radius: 50%;
+  padding: 5px;
+  background: var(--res-accent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--res-accent) 30%, transparent);
+}
+.aur-photo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid #fff; }
+
+.aur-name { font-family: var(--res-font); font-size: calc(23px * var(--res-heading-scale)); color: #1B1F27; line-height: 1.2; }
+.aur-title {
+  font-size: .82em; font-weight: 700; letter-spacing: .03em;
+  color: var(--res-accent);
+  margin-top: -8px;
+}
+.aur-contacts { display: flex; flex-direction: column; gap: 5px; font-size: .82em; color: #4a4f58; word-break: break-word; }
+
+.aur-side-section { width: 100%; text-align: left; }
+.aur-side-title {
+  font-size: .82em; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--res-accent);
+  text-align: center; margin-bottom: 10px;
+}
+.aur-side-title::after { content: ''; display: block; width: 28px; height: 2px; background: var(--res-accent); margin: 6px auto 0; }
+
+.aur-main { padding: 34px 32px; display: flex; flex-direction: column; gap: 22px; }
+.aur-main-title {
+  font-size: calc(14px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .08em;
+  color: #1B1F27;
+  padding-left: 12px;
+  border-left: 3px solid var(--res-accent);
+}
+.aur-about { font-size: .95em; color: #3a3a3a; }

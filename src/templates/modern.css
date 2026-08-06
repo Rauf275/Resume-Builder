@@ -1,0 +1,31 @@
+.modern-grid { display: grid; min-height: 297mm; }
+.modern-side {
+  background: var(--res-secondary);
+  color: #fff;
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.modern-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,.35); }
+.modern-name { font-family: var(--res-font); font-size: calc(24px * var(--res-heading-scale)); color: #fff; line-height: 1.15; }
+.modern-title { color: var(--res-accent); font-weight: 600; font-size: .95em; margin-top: -12px; }
+.modern-contacts { display: flex; flex-direction: column; gap: 5px; font-size: .82em; opacity: .9; word-break: break-word; }
+.modern-side-title { color: var(--res-accent); font-size: .85em; text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid rgba(255,255,255,.2); padding-bottom: 6px; }
+.modern-side-section .res-tag { background: rgba(255,255,255,.12); color: #fff; }
+.modern-side-section .res-lang-level { color: rgba(255,255,255,.6); }
+.modern-side-section .res-item-title { color: #fff; }
+.modern-side-section .res-item-sub { color: var(--res-accent); }
+.modern-side-section .res-item-date { color: rgba(255,255,255,.6); }
+.modern-main { padding: 32px 30px; display: flex; flex-direction: column; gap: 22px; }
+.modern-main-title {
+  font-size: calc(15px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--res-secondary);
+  border-bottom: 2px solid var(--res-accent);
+  padding-bottom: 6px;
+  display: inline-block;
+}
+.modern-about { font-size: .95em; color: #3a3a3a; }
+
+

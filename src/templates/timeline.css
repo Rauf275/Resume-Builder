@@ -1,0 +1,18 @@
+.tpl-timeline { }
+.tl-header { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid #eee; }
+.tl-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+.tl-name { font-family: var(--res-font); font-size: calc(26px * var(--res-heading-scale)); }
+.tl-title { color: var(--res-accent); font-weight: 600; margin-top: 2px; }
+.tl-contacts { font-size: .78em; color: #888; margin-top: 6px; }
+.tl-block { margin-bottom: 22px; }
+.tl-about { font-size: .95em; color: #3a3a3a; }
+.tl-h.res-section-title { font-size: calc(13px * var(--res-heading-scale)); text-transform: uppercase; letter-spacing: .1em; color: var(--res-secondary); margin-bottom: 14px; font-weight: 700; }
+
+.tl-line { position: relative; padding-left: 22px; border-left: 2px solid color-mix(in srgb, var(--res-accent) 30%, white); }
+.tl-node { position: relative; padding-bottom: 18px; }
+.tl-node:last-child { padding-bottom: 0; }
+.tl-dot { position: absolute; left: -27px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--res-accent); box-shadow: 0 0 0 3px #fff; }
+.tl-node-date { font-size: .78em; color: #999; font-variant-numeric: tabular-nums; }
+.tl-node-title { font-weight: 700; margin-top: 2px; }
+.tl-node-sub { font-size: .9em; color: var(--res-accent); font-weight: 600; }
+.tl-node-desc { margin-top: 5px; font-size: .92em; color: #444; }

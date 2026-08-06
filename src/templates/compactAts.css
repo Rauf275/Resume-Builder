@@ -1,0 +1,19 @@
+.tpl-compact { font-family: Arial, Helvetica, sans-serif; }
+.cmp-header { margin-bottom: 14px; }
+.cmp-name { font-family: inherit; font-size: calc(19px * var(--res-heading-scale)); font-weight: 700; }
+.cmp-title { font-size: .88em; color: #444; margin-top: 1px; }
+.cmp-contacts { font-size: .78em; color: #555; margin-top: 4px; }
+.cmp-block { margin-bottom: 12px; }
+.cmp-h.res-section-title {
+  font-size: calc(11.5px * var(--res-heading-scale)); text-transform: uppercase; letter-spacing: .04em;
+  font-weight: 700; color: #111; margin-bottom: 6px;
+}
+.cmp-about { font-size: .87em; }
+.tpl-compact .res-item { margin-bottom: 8px; }
+.tpl-compact .res-item-title { font-size: .93em; }
+.tpl-compact .res-item-sub { color: #333; font-weight: 400; }
+.tpl-compact .res-item-desc { margin-top: 3px; font-size: .87em; }
+.tpl-compact .res-tags { gap: 4px; }
+.tpl-compact .res-tag { background: none; color: #222; padding: 0; font-weight: 400; }
+.tpl-compact .res-tag::after { content: ' •'; margin-left: 4px; color: #999; }
+.tpl-compact .res-tag:last-child::after { content: ''; }

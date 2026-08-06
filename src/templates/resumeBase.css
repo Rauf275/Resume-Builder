@@ -1,0 +1,67 @@
+.resume-page {
+  position: relative;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(297mm - 1px),
+    rgba(20, 24, 29, 0.22) calc(297mm - 1px),
+    rgba(20, 24, 29, 0.22) 297mm,
+    transparent 297mm,
+    transparent calc(297mm + 12mm)
+  );
+  color: #1B1F27;
+  font-family: var(--res-font, 'Public Sans', sans-serif) !important;
+  font-size: var(--res-font-size, 15px) !important;
+  font-weight: var(--res-font-weight, 400) !important;
+  line-height: var(--res-line-height, 1.5) !important;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 15mm 16mm;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.resume-page.page-letter {
+  width: 216mm;
+  min-height: 279mm;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(279mm - 1px),
+    rgba(20, 24, 29, 0.22) calc(279mm - 1px),
+    rgba(20, 24, 29, 0.22) 279mm,
+    transparent 279mm,
+    transparent calc(279mm + 12mm)
+  );
+}
+
+.res-item, .entry-card, .res-lang-item { break-inside: avoid; page-break-inside: avoid; }
+
+.res-item { margin-bottom: 14px; }
+.res-item:last-child { margin-bottom: 0; }
+.res-item-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.res-item-title { font-weight: 700; }
+.res-item-date { font-size: .85em; color: #666; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.res-item-sub { font-size: .92em; color: var(--res-accent, #B4813F); font-weight: 600; margin-top: 1px; }
+.res-item-desc { margin-top: 6px; font-size: .95em; color: #3a3a3a; }
+.res-item-links { display: flex; gap: 12px; margin-top: 4px; font-size: .85em; color: var(--res-secondary, #2E4057); }
+
+.res-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.res-tag {
+  font-size: .82em; padding: 4px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--res-accent, #B4813F) 14%, white);
+  color: color-mix(in srgb, var(--res-accent, #B4813F) 70%, black);
+  font-weight: 600;
+}
+
+.res-lang-list { display: flex; flex-direction: column; gap: 6px; }
+.res-lang-item { display: flex; justify-content: space-between; font-size: .92em; }
+.res-lang-level { color: #777; }
+
+.res-section-title {
+  font-family: var(--res-font);
+  font-weight: 700;
+  letter-spacing: .02em;
+  margin-bottom: 10px;
+}
+

@@ -1,0 +1,18 @@
+.tpl-tech { }
+.tech-header { border-left: 4px solid var(--res-accent); padding-left: 16px; margin-bottom: 24px; }
+.tech-name { font-family: var(--font-mono, monospace); font-size: calc(24px * var(--res-heading-scale)); font-weight: 700; }
+.tech-title { color: var(--res-accent); font-family: var(--font-mono, monospace); font-size: .88em; margin-top: 3px; }
+.tech-contacts { font-size: .78em; color: #888; margin-top: 8px; font-family: var(--font-mono, monospace); }
+.tech-grid { display: grid; gap: 26px; }
+.tech-block { margin-bottom: 20px; }
+.tech-h.res-section-title {
+  font-family: var(--font-mono, monospace); font-size: .78em; font-weight: 700;
+  color: #fff; background: var(--res-secondary); display: inline-block;
+  padding: 3px 9px; border-radius: 3px; text-transform: uppercase; letter-spacing: .05em;
+  margin-bottom: 10px;
+}
+.tech-about { font-size: .93em; color: #3a3a3a; }
+.tech-left .res-tag { border-radius: 3px; font-family: var(--font-mono, monospace); }
+.tpl-tech .res-item-date { font-family: var(--font-mono, monospace); }
+
+
