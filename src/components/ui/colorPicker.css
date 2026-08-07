@@ -1,0 +1,52 @@
+.color-picker { position: relative; display: inline-flex; align-items: center; gap: 10px; }
+
+.color-picker-trigger {
+  width: 34px; height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0;
+  cursor: pointer;
+}
+.color-picker-trigger:hover { border-color: var(--text-faint); }
+.color-picker-trigger:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.color-picker-hex { font-size: 12px; color: var(--text-faint); font-family: var(--font-mono); }
+
+/* Same popover markup and styling everywhere — there is no OS-native picker to diverge
+   from, so desktop and mobile render pixel-identical UI. */
+.color-picker-popover {
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 50;
+  width: min(220px, calc(100vw - 40px));
+  background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg); padding: 12px; display: flex; flex-direction: column; gap: 12px;
+}
+
+.color-picker-sv {
+  position: relative; width: 100%; height: 140px; border-radius: var(--radius-sm);
+  touch-action: none; cursor: crosshair; overflow: hidden;
+}
+.color-picker-sv-thumb {
+  position: absolute; width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, .35), 0 1px 3px rgba(0, 0, 0, .4);
+  transform: translate(-50%, -50%); pointer-events: none;
+}
+
+.color-picker-hue {
+  position: relative; width: 100%; height: 14px; border-radius: 999px;
+  background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+  touch-action: none; cursor: pointer;
+}
+.color-picker-hue-thumb {
+  position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--bg-elevated); box-shadow: 0 0 0 1px rgba(0, 0, 0, .35);
+  transform: translate(-50%, -50%); pointer-events: none;
+}
+
+.color-picker-hex-input {
+  width: 100%; box-sizing: border-box; padding: 7px 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font-size: 12.5px; font-family: var(--font-mono); text-transform: lowercase;
+}
+.color-picker-hex-input:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+}
