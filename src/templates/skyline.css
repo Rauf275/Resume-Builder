@@ -2,8 +2,8 @@
   display: flex; align-items: center; gap: 24px;
   padding: 20px 22px;
   margin-bottom: 26px;
-  background: color-mix(in srgb, var(--res-accent) 7%, #fff);
-  border: 1px solid color-mix(in srgb, var(--res-accent) 20%, #fff);
+  background: var(--res-skyline-side-bg);
+  border: 1px solid var(--res-skyline-side-border);
   border-radius: 14px;
 }
 

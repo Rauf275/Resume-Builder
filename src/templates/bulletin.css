@@ -1,0 +1,45 @@
+.bul-grid { display: grid; min-height: 297mm; }
+.bul-side {
+  background: var(--res-bulletin-side-bg);
+  border-right: 1px solid var(--res-bulletin-side-border);
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Fixed, moderate height — the photo reads clearly as the sidebar's focal point without
+   ever stretching to fill the page. Sits inside the sidebar's own padding (never edge-to-
+   edge), so it's unmistakably a framed photo, not a full-bleed background image.
+   The accent-colored frame is always visible (whenever a photo is set) regardless of
+   what other content is filled in, so accent-color changes are never invisible here. */
+.bul-photo-card {
+  width: 100%; height: 190px;
+  border-radius: 12px; overflow: hidden;
+  border: 3px solid var(--res-accent);
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+.bul-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.bul-name { font-family: var(--res-font); font-size: calc(21px * var(--res-heading-scale)); color: #1B1F27; line-height: 1.2; }
+.bul-title { color: var(--res-accent); font-weight: 700; font-size: .88em; margin-top: -10px; }
+.bul-contacts { display: flex; flex-direction: column; gap: 5px; font-size: .82em; color: #4a4f58; word-break: break-word; }
+
+.bul-side-section { }
+.bul-side-title {
+  font-size: .8em; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--res-accent);
+  border-bottom: 1px solid #e2ddd0;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+.bul-main { padding: 30px 32px; display: flex; flex-direction: column; gap: 22px; }
+.bul-h {
+  font-size: calc(13px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .09em; font-weight: 800;
+  color: var(--res-secondary);
+  border-bottom: 2px solid var(--res-accent);
+  display: inline-block; padding-bottom: 5px; margin-bottom: 4px;
+}
+.bul-about { font-size: .95em; color: #3a3a3a; }

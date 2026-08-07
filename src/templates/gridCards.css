@@ -1,6 +1,6 @@
 .tpl-gridcards { }
 .gc-header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
-.gc-photo { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+.gc-photo { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; border: 2px solid var(--res-accent); }
 .gc-name { font-size: calc(24px * var(--res-heading-scale)); font-weight: 800; }
 .gc-title { color: var(--res-accent); font-weight: 600; margin-top: 2px; }
 .gc-contacts { font-size: .78em; color: #888; margin-top: 5px; }

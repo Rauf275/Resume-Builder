@@ -1,0 +1,24 @@
+.tpl-execframe { }
+.ef-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.ef-name { font-family: var(--res-font); font-weight: 700; font-size: calc(29px * var(--res-heading-scale)); color: var(--res-secondary); }
+.ef-title { letter-spacing: .08em; text-transform: uppercase; font-size: .82em; color: var(--res-accent); font-weight: 700; margin-top: 6px; }
+.ef-contacts { margin-top: 12px; font-size: .78em; color: #666; line-height: 1.7; }
+
+.ef-frame {
+  flex-shrink: 0; padding: 6px;
+  border: 2px solid var(--res-accent);
+}
+.ef-photo { width: 92px; height: 108px; object-fit: cover; display: block; }
+.ef-photo-empty { background: #F0EEE8; }
+
+.ef-rule { height: 3px; background: var(--res-secondary); margin: 20px 0 24px; position: relative; }
+.ef-rule::after { content: ''; position: absolute; left: 0; top: -3px; width: 60px; height: 3px; background: var(--res-accent); }
+
+.ef-block { margin-bottom: 20px; }
+.ef-about { font-size: .96em; color: #333; font-style: italic; }
+.ef-h.res-section-title {
+  font-family: var(--res-font);
+  font-size: calc(15px * var(--res-heading-scale)); font-weight: 700;
+  color: var(--res-secondary); margin-bottom: 10px;
+}
+.tpl-execframe .res-item-sub { color: var(--res-secondary); }

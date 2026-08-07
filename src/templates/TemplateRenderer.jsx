@@ -12,6 +12,10 @@ import CompactAts from './CompactAts';
 import Student from './Student';
 import Elegant from './Elegant';
 import GridCards from './GridCards';
+import Portrait from './Portrait';
+import Bulletin from './Bulletin';
+import CoverBanner from './CoverBanner';
+import ExecutiveFrame from './ExecutiveFrame';
 import Aurora from './Aurora';
 import Skyline from './Skyline';
 import './resumeBase.css';
@@ -31,6 +35,10 @@ const COMPONENTS = {
   student: Student,
   elegant: Elegant,
   gridcards: GridCards,
+  portrait: Portrait,
+  bulletin: Bulletin,
+  coverbanner: CoverBanner,
+  executiveframe: ExecutiveFrame,
   aurora: Aurora,
   skyline: Skyline,
 };

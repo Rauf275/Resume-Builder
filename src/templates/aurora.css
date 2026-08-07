@@ -1,7 +1,7 @@
 .aur-grid { display: grid; min-height: 297mm; }
 .aur-side {
-  background: color-mix(in srgb, var(--res-accent) 8%, #fff);
-  border-right: 1px solid color-mix(in srgb, var(--res-accent) 22%, #fff);
+  background: var(--res-aurora-side-bg);
+  border-right: 1px solid var(--res-aurora-side-border);
   padding: 34px 24px;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@
   width: 128px; height: 128px; border-radius: 50%;
   padding: 5px;
   background: var(--res-accent);
-  box-shadow: 0 6px 18px color-mix(in srgb, var(--res-accent) 30%, transparent);
+  box-shadow: 0 6px 18px var(--res-aurora-shadow);
 }
 .aur-photo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid #fff; }
 

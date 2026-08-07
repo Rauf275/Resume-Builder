@@ -8,7 +8,7 @@
 .tl-about { font-size: .95em; color: #3a3a3a; }
 .tl-h.res-section-title { font-size: calc(13px * var(--res-heading-scale)); text-transform: uppercase; letter-spacing: .1em; color: var(--res-secondary); margin-bottom: 14px; font-weight: 700; }
 
-.tl-line { position: relative; padding-left: 22px; border-left: 2px solid color-mix(in srgb, var(--res-accent) 30%, white); }
+.tl-line { position: relative; padding-left: 22px; border-left: 2px solid var(--res-timeline-border); }
 .tl-node { position: relative; padding-bottom: 18px; }
 .tl-node:last-child { padding-bottom: 0; }
 .tl-dot { position: absolute; left: -27px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--res-accent); box-shadow: 0 0 0 3px #fff; }

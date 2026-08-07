@@ -49,8 +49,8 @@
 .res-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .res-tag {
   font-size: .82em; padding: 4px 10px; border-radius: 999px;
-  background: color-mix(in srgb, var(--res-accent, #B4813F) 14%, white);
-  color: color-mix(in srgb, var(--res-accent, #B4813F) 70%, black);
+  background: var(--res-tag-bg);
+  color: var(--res-tag-text);
   font-weight: 600;
 }
 

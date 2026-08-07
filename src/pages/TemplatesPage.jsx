@@ -7,9 +7,41 @@ import { DEMO_RESUME } from '../constants/resumeSchema';
 import TemplateRenderer from '../templates/TemplateRenderer';
 import { useUIStore } from '../store/useUIStore';
 import { buildResumeCSSVars } from '../utils/customizationVars';
+import { useFitScale, PAGE_SIZE_PX } from '../hooks/useFitScale';
 import './templates.css';
 
 const DEFAULT_CUSTOM = { columnRatio: 34 };
+
+// The thumbnail's scale depends on the card's actual rendered width, which changes with
+// viewport size and how many cards fit per row (the grid uses `auto-fill, minmax(...)`,
+// so card width is never a single fixed number). A hardcoded CSS scale only matches one
+// assumed width; whenever the real width is narrower, the page overflows the frame and
+// its right edge gets clipped by `overflow: hidden`. Measuring the frame's own width via
+// useFitScale and applying that exact scale keeps the whole page visible at any width.
+function TemplateThumb({ t }) {
+  const [thumbRef, scale] = useFitScale(PAGE_SIZE_PX.A4.width, 0);
+  return (
+    <div className="template-thumb-frame" ref={thumbRef}>
+      <div
+        className="template-thumb-scale"
+        style={{
+          ...buildResumeCSSVars({
+            accentColor: t.defaultColor,
+            secondaryColor: '#2E4057',
+            font: 'Public Sans',
+            fontSize: 15,
+            lineHeight: 1.5,
+            headingScale: 1,
+            fontWeight: 400,
+          }),
+          transform: `scale(${scale})`,
+        }}
+      >
+        <TemplateRenderer templateId={t.id} resume={DEMO_RESUME} customization={{ ...DEFAULT_CUSTOM, accentColor: t.defaultColor, secondaryColor: '#2E4057', fontSize: 15, lineHeight: 1.5, headingScale: 1 }} pageClass="" />
+      </div>
+    </div>
+  );
+}
 
 export default function TemplatesPage() {
   const [query, setQuery] = useState('');
@@ -68,22 +100,7 @@ export default function TemplatesPage() {
         <div className="templates-grid">
           {filtered.map((t) => (
             <div key={t.id} className={`template-card ${activeId === t.id ? 'active' : ''}`}>
-              <div className="template-thumb-frame">
-                <div
-                  className="template-thumb-scale"
-                  style={buildResumeCSSVars({
-                    accentColor: t.defaultColor,
-                    secondaryColor: '#2E4057',
-                    font: 'Public Sans',
-                    fontSize: 15,
-                    lineHeight: 1.5,
-                    headingScale: 1,
-                    fontWeight: 400,
-                  })}
-                >
-                  <TemplateRenderer templateId={t.id} resume={DEMO_RESUME} customization={{ ...DEFAULT_CUSTOM, accentColor: t.defaultColor, secondaryColor: '#2E4057', fontSize: 15, lineHeight: 1.5, headingScale: 1 }} pageClass="" />
-                </div>
-              </div>
+              <TemplateThumb t={t} />
               <div className="template-card-body">
                 <div className="template-card-head">
                   <strong>{t.name}</strong>
