@@ -1,0 +1,62 @@
+.led-grid { display: grid; min-height: 297mm; }
+.led-side {
+  background: var(--res-ledger-side-bg);
+  border-right: 1px solid var(--res-ledger-side-border);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.led-id-card {
+  background: #fff;
+  border: 1px solid var(--res-ledger-side-border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+/* ID-card sized photo — clearly a portrait, but scaled to sit comfortably
+   inside the card rather than dominate the whole sidebar. */
+.led-photo {
+  width: 100px; height: 100px; margin: 0 auto 10px;
+  border-radius: 8px; object-fit: cover; display: block;
+  border: 2px solid var(--res-accent);
+}
+
+.led-name { font-family: var(--res-font); font-size: calc(18px * var(--res-heading-scale)); color: #1B1F27; line-height: 1.2; }
+.led-birthdate { font-size: .78em; margin: 4px 0 0; }
+.led-title { color: var(--res-accent); font-weight: 700; font-size: .8em; margin-top: 4px; }
+
+.led-contacts { display: flex; flex-direction: column; gap: 7px; font-size: .78em; color: #4a4f58; word-break: break-word; }
+.led-contact-row { padding-left: 10px; border-left: 2px solid var(--res-accent); }
+
+.led-side-section { }
+.led-side-title {
+  font-size: .78em; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--res-accent);
+  border-bottom: 1px solid var(--res-ledger-side-border);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+.led-main { padding: 30px 32px; display: flex; flex-direction: column; gap: 20px; }
+.led-h {
+  font-size: calc(13px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .08em; font-weight: 800;
+  color: var(--res-secondary);
+  border-bottom: 2px solid var(--res-accent);
+  display: inline-block; padding-bottom: 5px; margin-bottom: 4px;
+}
+.led-about { font-size: .95em; color: #3a3a3a; }
+
+/* The "ledger" touch: dates read like entries in a formal register —
+   monospaced, tabular, boxed — instead of plain inline text. */
+.tpl-ledger .res-item-date {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--res-ledger-side-bg);
+  border: 1px solid var(--res-ledger-side-border);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: .74em;
+}

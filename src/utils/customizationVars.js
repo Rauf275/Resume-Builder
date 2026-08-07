@@ -75,5 +75,15 @@ export function buildResumeCSSVars(customization) {
     '--res-skyline-side-bg': mix(accent, 7, '#ffffff'),
     '--res-skyline-side-border': mix(accent, 20, '#ffffff'),
     '--res-timeline-border': mix(accent, 30, '#ffffff'),
+
+    // New templates (Halo, Ledger, Briefing, Nova) — same precompute approach:
+    // plain rgb()/rgba() values so html2canvas exports never trip over a raw
+    // CSS color-mix() it can't parse.
+    '--res-ledger-side-bg': mix(accent, 10, '#F5F6F8'),
+    '--res-ledger-side-border': mix(accent, 25, '#E4E7EC'),
+    '--res-nova-grad-a': accent,
+    '--res-nova-grad-b': mix(accent, 45, '#ffffff'),
+    '--res-nova-side-bg': mix(accent, 8, '#ffffff'),
+    '--res-nova-side-border': mix(accent, 24, '#ffffff'),
   };
 }

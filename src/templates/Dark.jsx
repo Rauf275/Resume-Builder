@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './dark.css';
 
@@ -14,6 +14,7 @@ export default function Dark({ resume, customization, pageClass }) {
       <div className="dark-grid" style={{ gridTemplateColumns: `1fr ${customization.columnRatio}%` }}>
         <main className="dark-main">
           <h1 className="dark-name">{fullName(resume.personal)}</h1>
+          {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="dark-title">{resume.personal.title}</div>
           {resume.about && (
             <section className="dark-block">

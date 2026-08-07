@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './twoColumnTech.css';
 
@@ -13,6 +13,7 @@ export default function TwoColumnTech({ resume, customization, pageClass }) {
     <div className={`resume-page tpl-tech ${pageClass}`}>
       <header className="tech-header">
         <h1 className="tech-name">{fullName(resume.personal)}</h1>
+        {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
         <div className="tech-title">{resume.personal.title}</div>
         <div className="tech-contacts">{contactItems(resume.personal).join('  ·  ')}</div>
       </header>

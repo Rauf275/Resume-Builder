@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './designer.css';
 
@@ -18,6 +18,7 @@ export default function Designer({ resume, customization, pageClass }) {
         {resume.personal.photo && <img className="designer-photo" src={resume.personal.photo} alt="" />}
         <div>
           <h1 className="designer-name">{fullName(resume.personal)}</h1>
+          {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="designer-title">{resume.personal.title}</div>
         </div>
       </header>

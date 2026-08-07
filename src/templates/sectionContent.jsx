@@ -13,6 +13,14 @@ export function dateRange(start, end, current) {
   return `${s} — ${e}`;
 }
 
+export function formatBirthDate(value) {
+  if (!value) return '';
+  const [y, m, d] = value.split('-').map(Number);
+  if (!y || !m || !d) return value;
+  const date = new Date(y, m - 1, d);
+  return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
 export function fullName(personal) {
   return [personal.firstName, personal.lastName].filter(Boolean).join(' ');
 }

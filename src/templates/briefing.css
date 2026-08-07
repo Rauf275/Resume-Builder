@@ -1,0 +1,38 @@
+.bri-top { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+
+/* Rounded-square, inline with the name rather than a full-height column —
+   reads clearly without pulling focus away from the header text next to it. */
+.bri-photo {
+  width: 92px; height: 92px; border-radius: 14px; object-fit: cover; flex-shrink: 0;
+  border: 3px solid var(--res-accent);
+}
+
+.bri-name { font-family: var(--res-font); font-size: calc(24px * var(--res-heading-scale)); color: #1B1F27; line-height: 1.15; }
+.bri-title { color: var(--res-accent); font-weight: 700; font-size: .9em; margin-top: 3px; }
+
+.bri-strip {
+  background: var(--res-accent);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 24px;
+}
+.bri-pill {
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  font-size: .78em;
+  padding: 3px 11px;
+  border-radius: 999px;
+}
+
+.bri-card { border: 1px solid #e6e6e6; border-radius: 10px; padding: 16px 18px; margin-bottom: 16px; }
+.bri-card:last-child { margin-bottom: 0; }
+.bri-h {
+  display: inline-block;
+  font-size: calc(13px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .08em; font-weight: 800;
+  color: var(--res-secondary);
+  border-bottom: 2px solid var(--res-accent);
+  padding-bottom: 4px; margin-bottom: 10px;
+}
+.bri-about { font-size: .95em; color: #3a3a3a; }

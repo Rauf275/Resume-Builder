@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './student.css';
 
@@ -13,6 +13,7 @@ export default function Student({ resume, pageClass }) {
         {resume.personal.photo && <img className="stu-photo" src={resume.personal.photo} alt="" />}
         <div>
           <h1 className="stu-name">{fullName(resume.personal)}</h1>
+          {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="stu-title">{resume.personal.title}</div>
           <div className="stu-contacts">{contactItems(resume.personal).join('  ·  ')}</div>
         </div>

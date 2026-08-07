@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './bulletin.css';
 
@@ -20,6 +20,7 @@ export default function Bulletin({ resume, customization, pageClass }) {
             </div>
           )}
           <h1 className="bul-name">{fullName(resume.personal)}</h1>
+          {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           {resume.personal.title && <div className="bul-title">{resume.personal.title}</div>}
           <div className="bul-contacts">
             {contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Check, Image as ImageIcon, Columns2, Columns3 } from 'lucide-react';
 import Header from '../components/Header';
 import { TEMPLATES, TEMPLATE_STYLES } from '../constants/templates';
+import { TEMPLATE_ICONS, DEFAULT_TEMPLATE_ICON } from '../constants/templateIcons';
 import { DEMO_RESUME } from '../constants/resumeSchema';
 import TemplateRenderer from '../templates/TemplateRenderer';
 import { useUIStore } from '../store/useUIStore';
@@ -98,11 +99,16 @@ export default function TemplatesPage() {
         </div>
 
         <div className="templates-grid">
-          {filtered.map((t) => (
+          {filtered.map((t) => {
+            const TplIcon = TEMPLATE_ICONS[t.icon] || DEFAULT_TEMPLATE_ICON;
+            return (
             <div key={t.id} className={`template-card ${activeId === t.id ? 'active' : ''}`}>
               <TemplateThumb t={t} />
               <div className="template-card-body">
                 <div className="template-card-head">
+                  <span className="template-card-icon" style={{ color: t.defaultColor }}>
+                    <TplIcon size={16} strokeWidth={2} />
+                  </span>
                   <strong>{t.name}</strong>
                   {activeId === t.id && <span className="active-badge"><Check size={12} /> Active</span>}
                 </div>
@@ -117,7 +123,8 @@ export default function TemplatesPage() {
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
           {filtered.length === 0 && <div className="templates-empty">No templates match those filters.</div>}
         </div>
       </div>

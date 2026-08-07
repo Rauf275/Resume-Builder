@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
-import { formatMonth } from '../templates/sectionContent';
+import { formatMonth, formatBirthDate } from '../templates/sectionContent';
 
 function fileName(resume, ext) {
   const name = [resume.personal.firstName, resume.personal.lastName].filter(Boolean).join('-') || 'resume';
@@ -107,6 +107,12 @@ export async function exportDOCX(resume, sectionOrder, hiddenSections) {
       children: [new TextRun({ text: `${resume.personal.firstName} ${resume.personal.lastName}`, bold: true })],
     }),
     new Paragraph({ children: [new TextRun({ text: resume.personal.title, italics: true, color: '888888' })] }),
+    ...(resume.personal.birthDate
+      ? [new Paragraph({
+          children: [new TextRun({ text: `Date of birth: ${formatBirthDate(resume.personal.birthDate)}`, bold: true })],
+          spacing: { after: 100 },
+        })]
+      : []),
     new Paragraph({
       children: [
         new TextRun(

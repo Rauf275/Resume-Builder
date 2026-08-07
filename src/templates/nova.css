@@ -1,0 +1,49 @@
+.nova-headerbar {
+  background: linear-gradient(120deg, var(--res-nova-grad-a), var(--res-nova-grad-b));
+  padding: 30px 32px;
+}
+.nova-name { font-family: var(--res-font); font-weight: 700; font-size: calc(27px * var(--res-heading-scale)); color: #fff; }
+.nova-birthdate { color: rgba(255,255,255,.85); }
+.nova-title { color: rgba(255,255,255,.9); font-weight: 700; margin-top: 4px; }
+
+.nova-grid { display: grid; }
+.nova-main { padding: 26px 30px; display: flex; flex-direction: column; gap: 20px; }
+.nova-side {
+  padding: 26px 20px;
+  background: var(--res-nova-side-bg);
+  border-left: 1px solid var(--res-nova-side-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* Dashed accent ring keeps the photo visually distinct from the solid rings
+   used elsewhere, while staying at the same moderate scale as Aurora/Skyline. */
+.nova-photo-ring {
+  width: 112px; height: 112px; border-radius: 50%; padding: 5px;
+  border: 2px dashed var(--res-accent);
+}
+.nova-photo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+
+.nova-contacts { display: flex; flex-direction: column; gap: 5px; font-size: .82em; color: #4a4f58; word-break: break-word; }
+
+.nova-side-section { width: 100%; text-align: left; }
+.nova-side-title {
+  font-size: .8em; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--res-accent);
+  border-bottom: 1px solid var(--res-nova-side-border);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+.nova-block { }
+.nova-h {
+  font-size: calc(13px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .09em; font-weight: 800;
+  color: var(--res-secondary);
+  border-bottom: 2px solid var(--res-accent);
+  display: inline-block; padding-bottom: 5px; margin-bottom: 4px;
+}
+.nova-about { font-size: .95em; color: #3a3a3a; }

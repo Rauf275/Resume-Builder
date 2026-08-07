@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './corporate.css';
 
@@ -14,6 +14,7 @@ export default function Corporate({ resume, customization, pageClass }) {
       <header className="corp-bar">
         <div>
           <h1 className="corp-name">{fullName(resume.personal)}</h1>
+          {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="corp-title">{resume.personal.title}</div>
         </div>
         <div className="corp-contacts">{contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}</div>

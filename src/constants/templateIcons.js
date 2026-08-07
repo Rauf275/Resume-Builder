@@ -2,6 +2,7 @@ import {
   PanelLeft, Minus, GraduationCap, Landmark, Moon, PenTool, Milestone,
   Code2, Building2, Layers, ListChecks, BookOpen, Sparkles, LayoutGrid,
   Sun, Rows3, CircleUserRound, Newspaper, Image, Frame,
+  CircleDot, IdCard, FileBadge, Hexagon,
 } from 'lucide-react';
 
 // Single source of truth for template -> lucide icon, keyed by TEMPLATES[].icon.
@@ -12,6 +13,7 @@ export const TEMPLATE_ICONS = {
   PanelLeft, Minus, GraduationCap, Landmark, Moon, PenTool, Milestone,
   Code2, Building2, Layers, ListChecks, BookOpen, Sparkles, LayoutGrid,
   Sun, Rows3, CircleUserRound, Newspaper, Image, Frame,
+  CircleDot, IdCard, FileBadge, Hexagon,
 };
 
 export const DEFAULT_TEMPLATE_ICON = PanelLeft;

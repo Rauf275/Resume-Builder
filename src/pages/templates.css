@@ -33,8 +33,15 @@
 }
 
 .template-card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
-.template-card-head { display: flex; align-items: center; justify-content: space-between; }
+.template-card-head { display: flex; align-items: center; gap: 8px; }
 .template-card-head strong { font-size: 14.5px; }
+.template-card-head .active-badge { margin-left: auto; }
+.template-card-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 7px;
+  background: currentColor;
+}
+.template-card-icon svg { color: #fff; }
 .active-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--accent-ink); font-weight: 700; }
 .template-card-body p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; min-height: 32px; }
 .template-meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px; color: var(--text-faint); align-items: center; }

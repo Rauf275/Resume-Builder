@@ -18,6 +18,10 @@ import CoverBanner from './CoverBanner';
 import ExecutiveFrame from './ExecutiveFrame';
 import Aurora from './Aurora';
 import Skyline from './Skyline';
+import Halo from './Halo';
+import Ledger from './Ledger';
+import Briefing from './Briefing';
+import Nova from './Nova';
 import './resumeBase.css';
 
 const COMPONENTS = {
@@ -41,6 +45,10 @@ const COMPONENTS = {
   executiveframe: ExecutiveFrame,
   aurora: Aurora,
   skyline: Skyline,
+  halo: Halo,
+  ledger: Ledger,
+  briefing: Briefing,
+  nova: Nova,
 };
 
 export default function TemplateRenderer({ templateId, resume, customization, pageClass }) {

@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './magazine.css';
 
@@ -20,6 +20,7 @@ export default function Magazine({ resume, customization, pageClass }) {
           )}
           <div className="mag-photo-overlay">
             <h1 className="mag-name">{fullName(resume.personal)}</h1>
+            {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
             <div className="mag-title">{resume.personal.title}</div>
           </div>
         </aside>

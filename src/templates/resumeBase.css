@@ -58,6 +58,16 @@
 .res-lang-item { display: flex; justify-content: space-between; font-size: .92em; }
 .res-lang-level { color: #777; }
 
+/* Rendered right under the name in every template — deliberately kept at
+   (roughly) the base body text size rather than the small contact-line size,
+   so a filled-in birth date is always easy to read, not squinted at. */
+.res-birthdate {
+  font-size: 1em;
+  font-weight: 600;
+  opacity: .8;
+  margin: 2px 0 4px;
+}
+
 .res-section-title {
   font-family: var(--res-font);
   font-weight: 700;

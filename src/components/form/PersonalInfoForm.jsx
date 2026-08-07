@@ -62,10 +62,13 @@ export default function PersonalInfoForm() {
       </div>
       <Input label="Job title" value={personal.title} onChange={(e) => updatePersonal('title', e.target.value)} />
       <div className="entry-row">
+        <Input label="Date of birth" type="date" value={personal.birthDate} onChange={(e) => updatePersonal('birthDate', e.target.value)} />
         <Input label="Email" type="email" value={personal.email} onChange={(e) => updatePersonal('email', e.target.value)} />
-        <Input label="Phone" value={personal.phone} onChange={(e) => updatePersonal('phone', e.target.value)} />
       </div>
-      <Input label="Address" value={personal.address} onChange={(e) => updatePersonal('address', e.target.value)} />
+      <div className="entry-row">
+        <Input label="Phone" value={personal.phone} onChange={(e) => updatePersonal('phone', e.target.value)} />
+        <Input label="Address" value={personal.address} onChange={(e) => updatePersonal('address', e.target.value)} />
+      </div>
       <div className="entry-row">
         <Input label="GitHub" value={personal.github} onChange={(e) => updatePersonal('github', e.target.value)} placeholder="github.com/username" />
         <Input label="LinkedIn" value={personal.linkedin} onChange={(e) => updatePersonal('linkedin', e.target.value)} placeholder="linkedin.com/in/username" />
