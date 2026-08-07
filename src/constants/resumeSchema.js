@@ -1,3 +1,15 @@
+// A neutral, self-contained placeholder headshot (inline SVG — no network fetch, so it
+// always renders, including inside the PDF/image export pipeline). Used only in
+// DEMO_RESUME below so every photo-capable template shows an actual photo example in
+// the template gallery, instead of some showing nothing and others an empty gray box.
+const DEMO_PHOTO = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <rect width="200" height="200" fill="#DCE3EA"/>
+    <circle cx="100" cy="80" r="38" fill="#AEB9C4"/>
+    <path d="M34 190c0-48 29.5-78 66-78s66 30 66 78" fill="#AEB9C4"/>
+  </svg>`
+);
+
 export const SECTION_TYPES = {
   PERSONAL: 'personal',
   ABOUT: 'about',
@@ -89,7 +101,7 @@ export const emptyLanguage = () => ({
 // as the starting state for a real, editable resume — see DEFAULT_RESUME below.
 export const DEMO_RESUME = {
   personal: {
-    photo: '',
+    photo: DEMO_PHOTO,
     firstName: 'Alex',
     lastName: 'Morgan',
     title: 'Senior Product Designer',

@@ -2,6 +2,26 @@
 .cust-row { display: flex; flex-direction: column; gap: 6px; }
 .cust-label { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }
 .color-input { display: flex; align-items: center; gap: 10px; }
-.color-input input[type='color'] { width: 34px; height: 30px; border: 1px solid var(--border); border-radius: 6px; padding: 2px; background: var(--bg-elevated); }
+
+/* Mobile browsers (iOS Safari, Android Chrome) apply their own native chrome to
+   `input[type=color]` — extra inset padding and a rounded swatch — on top of whatever
+   box styling we set, so the swatch ends up looking noticeably different from the flush,
+   flat rectangle desktop renders. Resetting `appearance` and overriding the swatch
+   pseudo-elements makes the color fill the exact same box everywhere, so the control
+   matches desktop pixel-for-pixel instead of only sharing the same CSS rules. */
+.color-input input[type='color'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 34px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+  background: var(--bg-elevated);
+  cursor: pointer;
+}
+.color-input input[type='color']::-webkit-color-swatch-wrapper { padding: 0; border-radius: 4px; overflow: hidden; }
+.color-input input[type='color']::-webkit-color-swatch { border: none; border-radius: 4px; }
+.color-input input[type='color']::-moz-color-swatch { border: none; border-radius: 4px; }
 .color-input span { font-size: 12px; color: var(--text-faint); font-family: var(--font-mono); }
 .customization-panel input[type='range'] { width: 100%; accent-color: var(--accent); }

@@ -54,6 +54,18 @@
   font-size: 13.5px;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
+/* Without an explicit reset, mobile browsers draw their own native dropdown arrow and
+   inset padding on <select>, which looks noticeably different from the desktop version of
+   this exact same markup. Removing the native appearance and drawing our own chevron
+   keeps the control pixel-identical on mobile and desktop instead of just sharing CSS. */
+.field-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23888888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
 .field-input:focus, .field-textarea:focus, .field-select:focus {
   outline: none;
   border-color: var(--accent);
