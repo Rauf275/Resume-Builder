@@ -22,6 +22,12 @@ import Halo from './Halo';
 import Ledger from './Ledger';
 import Briefing from './Briefing';
 import Nova from './Nova';
+import Monogram from './Monogram';
+import Horizon from './Horizon';
+import Atlas from './Atlas';
+import Vantage from './Vantage';
+import Lumen from './Lumen';
+import Foundry from './Foundry';
 import './resumeBase.css';
 
 const COMPONENTS = {
@@ -49,6 +55,12 @@ const COMPONENTS = {
   ledger: Ledger,
   briefing: Briefing,
   nova: Nova,
+  monogram: Monogram,
+  horizon: Horizon,
+  atlas: Atlas,
+  vantage: Vantage,
+  lumen: Lumen,
+  foundry: Foundry,
 };
 
 export default function TemplateRenderer({ templateId, resume, customization, pageClass }) {

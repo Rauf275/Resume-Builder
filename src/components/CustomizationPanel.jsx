@@ -2,7 +2,7 @@ import { Select } from './ui/Field';
 import { useUIStore } from '../store/useUIStore';
 import { RotateCcw } from 'lucide-react';
 import Button from './ui/Button';
-import ColorPicker from './ui/ColorPicker';
+import ColorPickerPopover from './ui/ColorPickerPopover';
 import './customizationPanel.css';
 
 const FONT_GROUPS = [
@@ -25,19 +25,17 @@ export default function CustomizationPanel() {
     <div className="customization-panel notranslate" translate="no">
       <div className="cust-row">
         <label className="cust-label">Accent color</label>
-        <ColorPicker
-          label="Accent color"
-          value={customization.accentColor}
-          onChange={(hex) => setCustomization({ accentColor: hex })}
-        />
+        <div className="color-input">
+          <ColorPickerPopover label="Accent color" value={customization.accentColor} onChange={(hex) => setCustomization({ accentColor: hex })} />
+          <span>{customization.accentColor}</span>
+        </div>
       </div>
       <div className="cust-row">
         <label className="cust-label">Secondary color</label>
-        <ColorPicker
-          label="Secondary color"
-          value={customization.secondaryColor}
-          onChange={(hex) => setCustomization({ secondaryColor: hex })}
-        />
+        <div className="color-input">
+          <ColorPickerPopover label="Secondary color" value={customization.secondaryColor} onChange={(hex) => setCustomization({ secondaryColor: hex })} />
+          <span>{customization.secondaryColor}</span>
+        </div>
       </div>
 
       <Select label="Font" value={customization.font} onChange={(e) => setCustomization({ font: e.target.value })}>

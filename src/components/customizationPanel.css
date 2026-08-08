@@ -1,10 +1,6 @@
 .customization-panel { display: flex; flex-direction: column; gap: 16px; }
 .cust-row { display: flex; flex-direction: column; gap: 6px; }
 .cust-label { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }
-
-/* Accent/secondary color swatches use the custom ColorPicker component (see
-   components/ui/ColorPicker.jsx + colorPicker.css) instead of a native
-   `<input type="color">`, so the picker UI is identical on mobile and desktop rather
-   than handing off to whatever color picker the OS provides. */
-
+.color-input { display: flex; align-items: center; gap: 10px; }
+.color-input span { font-size: 12px; color: var(--text-faint); font-family: var(--font-mono); }
 .customization-panel input[type='range'] { width: 100%; accent-color: var(--accent); }

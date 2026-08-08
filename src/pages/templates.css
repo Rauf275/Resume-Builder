@@ -11,10 +11,13 @@
 }
 .search-box {
   display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius-sm);
-  border: 1px solid var(--border); background: var(--bg); flex: 1; min-width: 200px; color: var(--text-faint);
+  border: 1px solid var(--border); background: var(--bg); flex: 1 1 200px; min-width: 0; color: var(--text-faint);
 }
-.search-box input { border: none; outline: none; background: transparent; color: var(--text); font-size: 13.5px; flex: 1; }
-.templates-filters .field-select { width: auto; padding: 8px 10px; font-size: 13px; }
+.search-box input {
+  border: none; outline: none; background: transparent; color: var(--text); font-size: 13.5px;
+  flex: 1; min-width: 0; width: 100%;
+}
+.templates-filters .field-select { width: auto; padding-top: 8px; padding-bottom: 8px; padding-left: 10px; font-size: 13px; }
 .photo-filter { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-muted); white-space: nowrap; }
 
 .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 22px; }

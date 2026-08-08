@@ -1,52 +1,103 @@
-.color-picker { position: relative; display: inline-flex; align-items: center; gap: 10px; }
-
-.color-picker-trigger {
+.color-swatch-trigger {
   width: 34px; height: 30px;
-  border: 1px solid var(--border);
   border-radius: 6px;
+  border: 1px solid var(--border);
   padding: 0;
   cursor: pointer;
+  flex-shrink: 0;
 }
-.color-picker-trigger:hover { border-color: var(--text-faint); }
-.color-picker-trigger:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+.color-swatch-trigger:hover { border-color: var(--text-faint); }
+.color-swatch-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.color-picker-hex { font-size: 12px; color: var(--text-faint); font-family: var(--font-mono); }
-
-/* Same popover markup and styling everywhere — there is no OS-native picker to diverge
-   from, so desktop and mobile render pixel-identical UI. */
-.color-picker-popover {
-  position: absolute; top: calc(100% + 8px); left: 0; z-index: 50;
-  width: min(220px, calc(100vw - 40px));
-  background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg); padding: 12px; display: flex; flex-direction: column; gap: 12px;
-}
-
-.color-picker-sv {
-  position: relative; width: 100%; height: 140px; border-radius: var(--radius-sm);
-  touch-action: none; cursor: crosshair; overflow: hidden;
-}
-.color-picker-sv-thumb {
-  position: absolute; width: 14px; height: 14px; border-radius: 50%;
-  border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, .35), 0 1px 3px rgba(0, 0, 0, .4);
-  transform: translate(-50%, -50%); pointer-events: none;
+.color-popover {
+  position: fixed;
+  z-index: 500;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.color-picker-hue {
-  position: relative; width: 100%; height: 14px; border-radius: 999px;
+.color-sv-square {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: crosshair;
+  touch-action: none;
+}
+.color-sv-white { position: absolute; inset: 0; background: linear-gradient(to right, #fff, rgba(255,255,255,0)); }
+.color-sv-black { position: absolute; inset: 0; background: linear-gradient(to top, #000, rgba(0,0,0,0)); }
+.color-sv-thumb {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.4);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.color-hue-slider {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  border-radius: 999px;
   background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
-  touch-action: none; cursor: pointer;
+  cursor: pointer;
+  touch-action: none;
 }
-.color-picker-hue-thumb {
-  position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%;
-  background: #fff; border: 2px solid var(--bg-elevated); box-shadow: 0 0 0 1px rgba(0, 0, 0, .35);
-  transform: translate(-50%, -50%); pointer-events: none;
+.color-hue-thumb {
+  position: absolute;
+  top: 50%;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.4);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-.color-picker-hex-input {
-  width: 100%; box-sizing: border-box; padding: 7px 10px; border-radius: var(--radius-sm);
-  border: 1px solid var(--border); background: var(--bg); color: var(--text);
-  font-size: 12.5px; font-family: var(--font-mono); text-transform: lowercase;
+.color-fields-row { display: flex; align-items: center; gap: 8px; }
+.color-hex-field {
+  flex: 1;
+  display: flex; align-items: center; gap: 4px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-faint);
 }
-.color-picker-hex-input:focus {
-  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+.color-hex-field input {
+  border: none; outline: none; background: transparent;
+  color: var(--text); font-family: inherit; font-size: inherit;
+  width: 100%; text-transform: uppercase;
+}
+.color-eyedropper-btn {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text-muted);
+}
+.color-eyedropper-btn:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--accent-soft); }
+
+.color-rgb-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.color-rgb-field {
+  display: flex; flex-direction: column; gap: 3px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .04em; color: var(--text-faint);
+}
+.color-rgb-field input {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 6px 8px; background: var(--bg); color: var(--text);
+  font-family: var(--font-mono); font-size: 12.5px; width: 100%;
+}
+.color-rgb-field input:focus, .color-hex-field:focus-within {
+  outline: none; border-color: var(--accent);
 }

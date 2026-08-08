@@ -1,0 +1,21 @@
+.tpl-monogram { }
+.mono-header { display: flex; align-items: center; gap: 22px; }
+.mono-photo {
+  width: 112px; height: 112px; object-fit: cover; flex-shrink: 0;
+  border-radius: 10px;
+  border: 3px solid var(--res-accent);
+}
+.mono-photo-empty { background: #F0EEE8; }
+.mono-name { font-family: var(--res-font); font-weight: 700; font-size: calc(28px * var(--res-heading-scale)); color: var(--res-secondary); line-height: 1.1; }
+.mono-title { color: var(--res-accent); font-weight: 700; margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; font-size: .82em; }
+.mono-contacts { margin-top: 10px; font-size: .78em; color: #888; }
+
+.mono-rule { height: 1px; background: #e2e2e2; margin: 22px 0 22px; }
+.mono-block { margin-bottom: 20px; }
+.mono-h.res-section-title {
+  font-size: calc(13px * var(--res-heading-scale));
+  text-transform: uppercase; letter-spacing: .1em; font-weight: 800;
+  color: var(--res-secondary); margin-bottom: 10px;
+}
+.mono-about { font-size: .95em; color: #3a3a3a; }
+.tpl-monogram .res-item-sub { color: var(--res-accent); }
