@@ -22,3 +22,7 @@
   display: inline-block; padding-bottom: 5px; margin-bottom: 12px;
 }
 .mag-about { font-size: .95em; color: #3a3a3a; }
+
+
+/* Name here renders white on a dark/colored banner — birth date matches it */
+.tpl-magazine .res-birthdate { color: #fff; }

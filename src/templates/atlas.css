@@ -27,3 +27,7 @@
   font-weight: 800; color: var(--res-secondary); margin-bottom: 10px;
 }
 .atlas-about { font-size: .95em; color: #3a3a3a; }
+
+
+/* Name here uses the user's secondary/accent color — birth date matches it */
+.tpl-atlas .res-birthdate { color: var(--res-secondary); }

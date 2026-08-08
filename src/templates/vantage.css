@@ -30,3 +30,7 @@
   border-left: 3px solid var(--res-accent); padding-left: 8px; margin-bottom: 10px;
 }
 .vtg-about { font-size: .95em; color: #3a3a3a; }
+
+
+/* Name here renders white on a dark/colored banner — birth date matches it */
+.tpl-vantage .res-birthdate { color: #fff; }

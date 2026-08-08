@@ -13,3 +13,7 @@
   margin-bottom: 10px;
 }
 .tpl-executive .res-item-sub { color: var(--res-secondary); }
+
+
+/* Name here uses the user's secondary/accent color — birth date matches it */
+.tpl-executive .res-birthdate { color: var(--res-secondary); }

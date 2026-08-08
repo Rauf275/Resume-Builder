@@ -61,14 +61,16 @@
 /* Rendered right under the name in every template — deliberately kept at
    (roughly) the base body text size rather than the small contact-line size,
    so a filled-in birth date is always easy to read, not squinted at.
-   Color is fixed and explicit (not inherited) so it's identical across every
-   template regardless of surrounding background — previously it inherited
-   whatever text color was in scope, so it came out a different shade on
-   every template and was unreadable on some. */
+   This default matches the dark heading color (#1B1F27) used by the name in
+   most templates. Templates whose name renders in a different color (a white
+   name on a dark banner, or the user's chosen accent/secondary color) set
+   their own .res-birthdate override in their template stylesheet, scoped to
+   that template's root class, so the date is always the same color as the
+   name right above it — never a fixed shade that fights the banner. */
 .res-birthdate {
   font-size: 1em;
   font-weight: 600;
-  color: #565a63;
+  color: #1B1F27;
   opacity: 1;
   margin: 2px 0 4px;
 }

@@ -19,3 +19,7 @@
 .corp-about { font-size: .94em; color: #3a3a3a; }
 
 
+
+
+/* Name here renders white on a dark/colored banner — birth date matches it */
+.tpl-corporate .res-birthdate { color: #fff; }

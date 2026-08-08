@@ -22,3 +22,7 @@
   color: var(--res-secondary); margin-bottom: 10px;
 }
 .tpl-execframe .res-item-sub { color: var(--res-secondary); }
+
+
+/* Name here uses the user's secondary/accent color — birth date matches it */
+.tpl-execframe .res-birthdate { color: var(--res-secondary); }

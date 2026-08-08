@@ -23,3 +23,7 @@
 }
 .fnd-about { font-size: .93em; color: #3a3a3a; }
 .tpl-foundry .res-item-date { font-family: var(--font-mono, monospace); }
+
+
+/* Name here renders white on a dark/colored banner — birth date matches it */
+.tpl-foundry .res-birthdate { color: #fff; }

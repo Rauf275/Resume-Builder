@@ -19,3 +19,7 @@
 }
 .mono-about { font-size: .95em; color: #3a3a3a; }
 .tpl-monogram .res-item-sub { color: var(--res-accent); }
+
+
+/* Name here uses the user's secondary/accent color — birth date matches it */
+.tpl-monogram .res-birthdate { color: var(--res-secondary); }

@@ -27,3 +27,7 @@
 .dark-side-section .res-lang-level { color: #7D8590; }
 
 
+
+
+/* Name here renders white on a dark/colored banner — birth date matches it */
+.tpl-dark .res-birthdate { color: #fff; }

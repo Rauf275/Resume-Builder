@@ -21,3 +21,7 @@
   font-weight: 800; color: var(--res-accent); margin-bottom: 10px;
 }
 .lum-about { font-size: .96em; color: #3a3a3a; }
+
+
+/* Name here uses the user's secondary/accent color — birth date matches it */
+.tpl-lumen .res-birthdate { color: var(--res-secondary); }
