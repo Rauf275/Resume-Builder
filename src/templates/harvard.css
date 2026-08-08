@@ -1,12 +1,13 @@
 .tpl-harvard { font-family: 'Georgia', 'Times New Roman', serif; }
 .harvard-header { text-align: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid #1a1a1a; }
-.harvard-name { font-family: inherit; font-size: calc(24px * var(--res-heading-scale)); letter-spacing: .05em; text-transform: uppercase; }
+.harvard-name { font-family: inherit; font-size: calc(24px * var(--res-heading-scale)); letter-spacing: .05em; text-transform: uppercase; color: #1B1F27; }
 .harvard-contacts { margin-top: 8px; font-size: .82em; color: #444; }
 .harvard-block { margin-bottom: 18px; }
 .harvard-title.res-section-title {
   font-size: calc(13px * var(--res-heading-scale));
   text-transform: uppercase; letter-spacing: .1em; font-weight: 700;
   border-bottom: 1px solid #1a1a1a; padding-bottom: 4px; margin-bottom: 10px;
+  color: #1B1F27;
 }
 .harvard-about { font-size: .93em; text-align: left; }
 .tpl-harvard .res-item-sub { color: #333; font-style: italic; font-weight: 400; }

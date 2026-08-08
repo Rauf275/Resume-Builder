@@ -7,7 +7,7 @@
   display: block; margin-left: auto; margin-right: auto;
 }
 .hz-photo-empty { background: #F0EEE8; }
-.hz-name { font-family: var(--res-font); font-weight: 700; font-size: calc(25px * var(--res-heading-scale)); margin-top: 14px; }
+.hz-name { font-family: var(--res-font); font-weight: 700; font-size: calc(25px * var(--res-heading-scale)); margin-top: 14px; color: #1B1F27; }
 .hz-title { color: var(--res-accent); font-weight: 700; margin-top: 3px; }
 .hz-contacts { margin-top: 8px; font-size: .78em; color: #888; }
 

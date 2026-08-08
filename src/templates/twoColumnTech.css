@@ -1,6 +1,6 @@
 .tpl-tech { }
 .tech-header { border-left: 4px solid var(--res-accent); padding-left: 16px; margin-bottom: 24px; }
-.tech-name { font-family: var(--font-mono, monospace); font-size: calc(24px * var(--res-heading-scale)); font-weight: 700; }
+.tech-name { font-family: var(--font-mono, monospace); font-size: calc(24px * var(--res-heading-scale)); font-weight: 700; color: #1B1F27; }
 .tech-title { color: var(--res-accent); font-family: var(--font-mono, monospace); font-size: .88em; margin-top: 3px; }
 .tech-contacts { font-size: .78em; color: #888; margin-top: 8px; font-family: var(--font-mono, monospace); }
 .tech-grid { display: grid; gap: 26px; }

@@ -1,7 +1,7 @@
 .tpl-elegant { text-align: center; }
 .eleg-header { margin-bottom: 26px; }
 .eleg-photo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; margin: 0 auto 14px; display: block; }
-.eleg-name { font-family: var(--res-font); font-weight: 400; font-size: calc(32px * var(--res-heading-scale)); letter-spacing: .02em; }
+.eleg-name { font-family: var(--res-font); font-weight: 400; font-size: calc(32px * var(--res-heading-scale)); letter-spacing: .02em; color: #1B1F27; }
 .eleg-title { font-style: italic; color: var(--res-accent); margin-top: 4px; font-family: var(--res-font); }
 .eleg-rule { width: 60px; height: 1px; background: #ccc; margin: 14px auto; }
 .eleg-contacts { font-size: .78em; color: #999; letter-spacing: .03em; }

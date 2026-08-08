@@ -60,11 +60,16 @@
 
 /* Rendered right under the name in every template — deliberately kept at
    (roughly) the base body text size rather than the small contact-line size,
-   so a filled-in birth date is always easy to read, not squinted at. */
+   so a filled-in birth date is always easy to read, not squinted at.
+   Color is fixed and explicit (not inherited) so it's identical across every
+   template regardless of surrounding background — previously it inherited
+   whatever text color was in scope, so it came out a different shade on
+   every template and was unreadable on some. */
 .res-birthdate {
   font-size: 1em;
   font-weight: 600;
-  opacity: .8;
+  color: #d1d2d4;
+  opacity: 1;
   margin: 2px 0 4px;
 }
 

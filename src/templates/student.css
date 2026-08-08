@@ -1,7 +1,7 @@
 .tpl-student { }
 .stu-header { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
 .stu-photo { width: 86px; height: 86px; border-radius: 18px; object-fit: cover; }
-.stu-name { font-family: var(--res-font); font-size: calc(25px * var(--res-heading-scale)); }
+.stu-name { font-family: var(--res-font); font-size: calc(25px * var(--res-heading-scale)); color: #1B1F27; }
 .stu-title { color: var(--res-accent); font-weight: 600; margin-top: 2px; }
 .stu-contacts { font-size: .78em; color: #888; margin-top: 6px; }
 .stu-block { margin-bottom: 20px; }

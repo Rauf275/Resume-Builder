@@ -7,7 +7,7 @@
   box-shadow: 0 0 0 3px var(--res-accent), 0 8px 24px rgba(0,0,0,.12);
 }
 .port-photo-empty { background: #F0EEE8; }
-.port-name { font-family: var(--res-font); font-weight: 700; font-size: calc(30px * var(--res-heading-scale)); letter-spacing: -.01em; }
+.port-name { font-family: var(--res-font); font-weight: 700; font-size: calc(30px * var(--res-heading-scale)); letter-spacing: -.01em; color: #1B1F27; }
 .port-title { color: var(--res-accent); font-weight: 700; margin-top: 4px; font-size: 1.02em; }
 .port-rule { width: 48px; height: 3px; background: var(--res-accent); margin: 16px auto; border-radius: 2px; }
 .port-contacts { font-size: .8em; color: #888; letter-spacing: .02em; }
