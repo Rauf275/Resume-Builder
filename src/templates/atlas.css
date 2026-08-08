@@ -1,7 +1,7 @@
 .tpl-atlas.resume-page { width: 210mm; min-height: 297mm; }
 .atlas-grid { display: grid; min-height: 297mm; }
 .atlas-side {
-  background: color-mix(in srgb, var(--res-accent) 8%, #FAF9F6);
+  background: var(--res-atlas-side-bg);
   padding: 26px 20px;
   display: flex; flex-direction: column; gap: 20px;
 }
@@ -19,7 +19,7 @@
 .atlas-h.res-section-title {
   font-size: calc(11.5px * var(--res-heading-scale)); text-transform: uppercase; letter-spacing: .08em;
   font-weight: 800; color: var(--res-secondary); margin-bottom: 8px;
-  border-bottom: 1px solid color-mix(in srgb, var(--res-accent) 30%, transparent); padding-bottom: 5px;
+  border-bottom: 1px solid var(--res-atlas-h-border); padding-bottom: 5px;
 }
 .atlas-main { padding: 30px 28px; }
 .atlas-h-main.res-section-title {

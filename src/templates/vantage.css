@@ -8,7 +8,7 @@
 }
 .vtg-diagonal {
   position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 60%, color-mix(in srgb, var(--res-accent) 55%, transparent) 60%);
+  background: linear-gradient(105deg, transparent 60%, var(--res-vantage-diagonal) 60%);
 }
 .vtg-photo {
   position: relative; width: 112px; height: 112px; border-radius: 12px; object-fit: cover;

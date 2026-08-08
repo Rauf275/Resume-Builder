@@ -21,31 +21,39 @@ function download(blob, name) {
 
 // ---------- PDF ----------
 export async function exportPDF(node, resume, pageSize = 'A4') {
-  if (document.fonts?.ready) { await document.fonts.ready; }
-  const canvas = await html2canvas(node, { scale: 2.5, useCORS: true, backgroundColor: '#ffffff' });
-  const imgData = canvas.toDataURL('image/jpeg', 0.96);
+  try {
+    if (document.fonts?.ready) { await document.fonts.ready; }
+    const canvas = await html2canvas(node, { scale: 2.5, useCORS: true, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/jpeg', 0.96);
 
-  const pdf = new jsPDF({ unit: 'mm', format: pageSize.toLowerCase() === 'letter' ? 'letter' : 'a4' });
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
+    const pdf = new jsPDF({ unit: 'mm', format: pageSize.toLowerCase() === 'letter' ? 'letter' : 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
-  const imgWidthMm = pageWidth;
-  const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
+    const imgWidthMm = pageWidth;
+    const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
 
-  let heightLeft = imgHeightMm;
-  let position = 0;
+    let heightLeft = imgHeightMm;
+    let position = 0;
 
-  pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
-  heightLeft -= pageHeight;
-
-  while (heightLeft > 0) {
-    position = heightLeft - imgHeightMm;
-    pdf.addPage();
     pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
     heightLeft -= pageHeight;
-  }
 
-  pdf.save(fileName(resume, 'pdf'));
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeightMm;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(fileName(resume, 'pdf'));
+  } catch (err) {
+    // Previously a failure here (e.g. an unsupported CSS color function
+    // reaching html2canvas) would throw silently — the button just did
+    // nothing and no file appeared, with no indication anything went wrong.
+    console.error('PDF export failed:', err);
+    window.alert('Sorry, the PDF could not be generated. Please try again, or use the HTML export instead.');
+  }
 }
 
 // ---------- Standalone HTML ----------
@@ -98,6 +106,15 @@ function dateRangeText(start, end, current) {
 }
 
 export async function exportDOCX(resume, sectionOrder, hiddenSections) {
+  try {
+    return await exportDOCXInner(resume, sectionOrder, hiddenSections);
+  } catch (err) {
+    console.error('DOCX export failed:', err);
+    window.alert('Sorry, the Word document could not be generated. Please try again.');
+  }
+}
+
+async function exportDOCXInner(resume, sectionOrder, hiddenSections) {
   const visible = sectionOrder.filter((s) => !hiddenSections.includes(s));
   const children = [];
 

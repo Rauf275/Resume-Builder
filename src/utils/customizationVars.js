@@ -85,5 +85,14 @@ export function buildResumeCSSVars(customization) {
     '--res-nova-grad-b': mix(accent, 45, '#ffffff'),
     '--res-nova-side-bg': mix(accent, 8, '#ffffff'),
     '--res-nova-side-border': mix(accent, 24, '#ffffff'),
+
+    // Atlas, Lumen, Vantage — these three still had raw color-mix() in their
+    // CSS (missed when the rest of the templates were migrated above), which
+    // is exactly why their PDF export was silently failing. Same fix.
+    '--res-atlas-side-bg': mix(accent, 8, '#FAF9F6'),
+    '--res-atlas-h-border': mixAlpha(accent, 30),
+    '--res-lumen-photo-ring': mixAlpha(accent, 16),
+    '--res-lumen-badge-bg': mix(accent, 14, '#ffffff'),
+    '--res-vantage-diagonal': mixAlpha(accent, 55),
   };
 }

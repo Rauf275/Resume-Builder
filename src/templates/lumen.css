@@ -3,13 +3,13 @@
 .lum-photo {
   width: 112px; height: 112px; border-radius: 50%; object-fit: cover;
   margin: 0 auto 16px; display: block;
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--res-accent) 16%, transparent), 0 8px 26px rgba(0,0,0,.14);
+  box-shadow: 0 0 0 6px var(--res-lumen-photo-ring), 0 8px 26px rgba(0,0,0,.14);
 }
 .lum-photo-empty { background: #F0EEE8; }
 .lum-name { font-family: var(--res-font); font-weight: 400; font-size: calc(30px * var(--res-heading-scale)); letter-spacing: .01em; color: var(--res-secondary); }
 .lum-title-badge {
   display: inline-block; margin-top: 10px;
-  background: color-mix(in srgb, var(--res-accent) 14%, white);
+  background: var(--res-lumen-badge-bg);
   color: var(--res-secondary);
   padding: 5px 16px; border-radius: 999px; font-weight: 700; font-size: .82em;
 }
