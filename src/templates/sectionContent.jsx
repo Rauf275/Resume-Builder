@@ -25,6 +25,16 @@ export function fullName(personal) {
   return [personal.firstName, personal.lastName].filter(Boolean).join(' ');
 }
 
+// Drop this next to the name in every template's header. Centralizing it
+// here means the "Date of birth" line always looks/behaves the same, and —
+// paired with the dev-time check in TemplateRenderer.jsx — any new template
+// that forgets to render it gets flagged immediately instead of silently
+// shipping without a birth date.
+export function BirthDateLine({ resume }) {
+  if (!resume.personal.birthDate) return null;
+  return <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>;
+}
+
 export function contactItems(personal) {
   return [
     personal.email,

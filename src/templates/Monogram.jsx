@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './monogram.css';
 
@@ -14,6 +14,7 @@ export default function Monogram({ resume, pageClass }) {
         )}
         <div className="mono-text">
           <h1 className="mono-name">{fullName(resume.personal)}</h1>
+          <BirthDateLine resume={resume} />
           <div className="mono-title">{resume.personal.title}</div>
           <div className="mono-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
         </div>

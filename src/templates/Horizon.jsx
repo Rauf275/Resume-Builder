@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './horizon.css';
 
@@ -19,6 +19,7 @@ export default function Horizon({ resume, customization, pageClass }) {
           <div className="hz-photo hz-photo-empty" />
         )}
         <h1 className="hz-name">{fullName(resume.personal)}</h1>
+        <BirthDateLine resume={resume} />
         <div className="hz-title">{resume.personal.title}</div>
         <div className="hz-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
       </div>
