@@ -11,10 +11,60 @@
   padding: 15mm 16mm;
   margin: 0 auto;
   box-sizing: border-box;
+  /* Inherited by every descendant, so any block of text in any section — in
+     every template, including custom sections — wraps at the page edge
+     instead of overflowing it. Without this, a long unbroken token (a URL
+     with no spaces, a long word) can force a line past the page boundary
+     instead of breaking, which is what long descriptions/links were doing. */
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .resume-page.page-letter {
   width: 216mm;
   min-height: 279mm;
+}
+
+/* Every two/three-column template lays its side/main panels out as direct
+   children of a `*-grid` container (atlas-grid, vtg-grid, tech-grid, ...).
+   CSS Grid items default to `min-width: auto`, which lets a column refuse to
+   shrink below its content's intrinsic width — so a panel with a lot of text
+   (or one long unbroken token) can force its whole column wider than the
+   assigned track, pushing content past the page edge in a single line
+   instead of wrapping inside it. Resetting min-width to 0 lets the
+   overflow-wrap rule above actually take effect at the intended column
+   width, for every current and future column template alike. */
+.resume-page [class$="-grid"] > * {
+  min-width: 0;
+}
+
+/* Sidebar+main two-column templates size their `*-grid` row to whatever
+   content it holds, so a page with little content leaves a colored or
+   shaded sidebar that stops partway down while the rest of the A4 sheet
+   below it sits blank and un-styled. Turning the page into a column flexbox
+   lets that single-row grid grow to fill any unused space up to the page's
+   own min-height (297mm), and CSS Grid's default `align-items: stretch`
+   then carries that full height into both columns — so a short sidebar
+   always reaches the bottom of the page. `flex-shrink: 0` keeps this from
+   ever compressing a page that's already taller than 297mm because it has a
+   lot of content — it can only grow, never shrink.
+   Listed explicitly (rather than any `*-grid`) so this never reaches
+   GridCards' `.gc-grid` — a multi-row card grid, not a sidebar layout, where
+   the same stretch would inflate every card's row height instead of filling
+   trailing page space. */
+.resume-page:has(
+    > .atlas-grid, > .aur-grid, > .bul-grid, > .cont-grid, > .corp-grid,
+    > .cb-grid, > .dark-grid, > .fnd-grid, > .led-grid, > .modern-grid,
+    > .nova-grid, > .tech-grid, > .vtg-grid
+  ) {
+  display: flex;
+  flex-direction: column;
+}
+.resume-page > .atlas-grid, .resume-page > .aur-grid, .resume-page > .bul-grid,
+.resume-page > .cont-grid, .resume-page > .corp-grid, .resume-page > .cb-grid,
+.resume-page > .dark-grid, .resume-page > .fnd-grid, .resume-page > .led-grid,
+.resume-page > .modern-grid, .resume-page > .nova-grid, .resume-page > .tech-grid,
+.resume-page > .vtg-grid {
+  flex: 1 0 auto;
 }
 
 .res-item, .entry-card, .res-lang-item { break-inside: avoid; page-break-inside: avoid; }
