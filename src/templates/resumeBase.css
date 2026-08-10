@@ -1,15 +1,6 @@
 .resume-page {
   position: relative;
   background-color: #fff;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(297mm - 1px),
-    rgba(20, 24, 29, 0.22) calc(297mm - 1px),
-    rgba(20, 24, 29, 0.22) 297mm,
-    transparent 297mm,
-    transparent calc(297mm + 12mm)
-  );
   color: #1B1F27;
   font-family: var(--res-font, 'Public Sans', sans-serif) !important;
   font-size: var(--res-font-size, 15px) !important;
@@ -24,15 +15,6 @@
 .resume-page.page-letter {
   width: 216mm;
   min-height: 279mm;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(279mm - 1px),
-    rgba(20, 24, 29, 0.22) calc(279mm - 1px),
-    rgba(20, 24, 29, 0.22) 279mm,
-    transparent 279mm,
-    transparent calc(279mm + 12mm)
-  );
 }
 
 .res-item, .entry-card, .res-lang-item { break-inside: avoid; page-break-inside: avoid; }

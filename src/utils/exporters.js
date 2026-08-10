@@ -58,6 +58,9 @@ export async function exportPDF(node, resume, pageSize = 'A4') {
 
 // ---------- Standalone HTML ----------
 export function exportHTML(node, resume) {
+  const clone = node.cloneNode(true);
+  clone.querySelectorAll('[data-html2canvas-ignore]').forEach((el) => el.remove());
+
   const cssText = Array.from(document.styleSheets)
     .map((sheet) => {
       try {
@@ -79,7 +82,7 @@ export function exportHTML(node, resume) {
 </style>
 </head>
 <body>
-${node.outerHTML}
+${clone.outerHTML}
 </body>
 </html>`;
 
