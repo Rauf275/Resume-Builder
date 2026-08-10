@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './minimal.css';
 
@@ -10,7 +10,7 @@ export default function Minimal({ resume, pageClass }) {
         <h1 className="minimal-name">{fullName(resume.personal)}</h1>
         {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
         <div className="minimal-title">{resume.personal.title}</div>
-        <div className="minimal-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="minimal-contacts" />
       </header>
       {resume.about && (
         <section className="minimal-block">

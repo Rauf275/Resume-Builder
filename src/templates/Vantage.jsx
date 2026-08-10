@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
+import { fullName, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './vantage.css';
 
@@ -22,7 +22,7 @@ export default function Vantage({ resume, customization, pageClass }) {
           <h1 className="vtg-name">{fullName(resume.personal)}</h1>
           <BirthDateLine resume={resume} />
           <div className="vtg-title">{resume.personal.title}</div>
-          <div className="vtg-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+          <ContactRow items={contactItemsWithIcons(resume.personal)} className="vtg-contacts" />
         </div>
       </header>
 

@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './coverBanner.css';
 
@@ -21,7 +21,7 @@ export default function CoverBanner({ resume, customization, pageClass }) {
           <h1 className="cb-name">{fullName(resume.personal)}</h1>
           {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="cb-title">{resume.personal.title}</div>
-          <div className="cb-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+          <ContactRow items={contactItemsWithIcons(resume.personal)} className="cb-contacts" />
         </div>
       </header>
 

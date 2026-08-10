@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './aurora.css';
 
@@ -23,7 +23,7 @@ export default function Aurora({ resume, customization, pageClass }) {
           {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           {resume.personal.title && <div className="aur-title">{resume.personal.title}</div>}
           <div className="aur-contacts">
-            {contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}
+            <ContactList items={contactItemsWithIcons(resume.personal)} className="" />
           </div>
           {side.map((key) => !isSectionEmpty(resume, key) && (
             <div className="aur-side-section" key={key}>

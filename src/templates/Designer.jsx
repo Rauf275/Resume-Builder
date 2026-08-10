@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './designer.css';
 
@@ -39,7 +39,7 @@ export default function Designer({ resume, customization, pageClass }) {
         </div>
         <aside className="designer-side">
           <div className="designer-contacts">
-            {contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}
+            <ContactList items={contactItemsWithIcons(resume.personal)} className="" />
           </div>
           {side.map((key) => !isSectionEmpty(resume, key) && (
             <div className="designer-block" key={key}>

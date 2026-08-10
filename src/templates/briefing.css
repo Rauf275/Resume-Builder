@@ -23,6 +23,7 @@
   font-size: .78em;
   padding: 3px 11px;
   border-radius: 999px;
+  --contact-icon-color: #fff;
 }
 
 .bri-card { border: 1px solid #e6e6e6; border-radius: 10px; padding: 16px 18px; margin-bottom: 16px; }

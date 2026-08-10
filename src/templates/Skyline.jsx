@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './skyline.css';
 
@@ -13,7 +13,7 @@ export default function Skyline({ resume, pageClass }) {
           {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           {resume.personal.title && <div className="sky-title">{resume.personal.title}</div>}
           <div className="sky-contacts">
-            {contactItems(resume.personal).map((c, i) => <span key={i}>{c}</span>)}
+            <ContactRow items={contactItemsWithIcons(resume.personal)} className="" />
           </div>
         </div>
       </header>

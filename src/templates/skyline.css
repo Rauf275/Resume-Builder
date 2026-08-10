@@ -21,7 +21,7 @@
   display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 10px;
   font-size: .82em; color: #555;
 }
-.sky-contacts span:not(:last-child)::after { content: '·'; margin-left: 10px; color: var(--res-accent); }
+.sky-contacts .res-contact-item:not(:last-child)::after { content: '·'; margin-left: 10px; color: var(--res-accent); }
 
 .sky-block { margin-bottom: 22px; }
 .sky-block:last-child { margin-bottom: 0; }

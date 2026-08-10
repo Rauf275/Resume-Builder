@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './compactAts.css';
 
@@ -10,7 +10,7 @@ export default function CompactAts({ resume, pageClass }) {
         <h1 className="cmp-name">{fullName(resume.personal)}</h1>
         {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
         <div className="cmp-title">{resume.personal.title}</div>
-        <div className="cmp-contacts">{contactItems(resume.personal).join(' | ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="cmp-contacts" />
       </header>
       {resume.about && (
         <section className="cmp-block">

@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
-import { formatMonth, formatBirthDate } from '../templates/sectionContent';
+import { formatMonth, formatBirthDate, contactItems } from '../templates/sectionContent';
 
 function fileName(resume, ext) {
   const name = [resume.personal.firstName, resume.personal.lastName].filter(Boolean).join('-') || 'resume';
@@ -131,13 +131,7 @@ async function exportDOCXInner(resume, sectionOrder, hiddenSections) {
         })]
       : []),
     new Paragraph({
-      children: [
-        new TextRun(
-          [resume.personal.email, resume.personal.phone, resume.personal.address, resume.personal.linkedin, resume.personal.github]
-            .filter(Boolean)
-            .join('  |  ')
-        ),
-      ],
+      children: [new TextRun(contactItems(resume.personal).join('  |  '))],
       spacing: { after: 200 },
     })
   );

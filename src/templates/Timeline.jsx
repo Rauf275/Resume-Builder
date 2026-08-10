@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, dateRange, formatMonth, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, dateRange, formatMonth, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './timeline.css';
 
@@ -13,7 +13,7 @@ export default function Timeline({ resume, pageClass }) {
           <h1 className="tl-name">{fullName(resume.personal)}</h1>
           {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="tl-title">{resume.personal.title}</div>
-          <div className="tl-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+          <ContactRow items={contactItemsWithIcons(resume.personal)} className="tl-contacts" />
         </div>
       </header>
 

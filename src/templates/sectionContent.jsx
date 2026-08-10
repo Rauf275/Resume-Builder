@@ -1,3 +1,6 @@
+import { Mail, Phone, MapPin, Globe, Send } from 'lucide-react';
+import { GithubMark, LinkedinMark } from '../components/icons/BrandIcons';
+
 export function formatMonth(value) {
   if (!value) return '';
   const [y, m] = value.split('-');
@@ -45,6 +48,50 @@ export function contactItems(personal) {
     personal.website,
     personal.telegram,
   ].filter(Boolean);
+}
+
+// One icon per contact type, used consistently everywhere a resume shows contact info —
+// large, bold, and colored with the template's own accent (never a generic small gray
+// glyph), so it reads clearly both on screen and in the exported PDF.
+export function contactItemsWithIcons(personal) {
+  const rows = [
+    { key: 'email', Icon: Mail, text: personal.email },
+    { key: 'phone', Icon: Phone, text: personal.phone },
+    { key: 'address', Icon: MapPin, text: personal.address },
+    { key: 'github', Icon: GithubMark, text: personal.github },
+    { key: 'linkedin', Icon: LinkedinMark, text: personal.linkedin },
+    { key: 'website', Icon: Globe, text: personal.website },
+    { key: 'telegram', Icon: Send, text: personal.telegram },
+  ];
+  return rows.filter((r) => r.text);
+}
+
+function ContactItem({ Icon, text, itemClassName = '' }) {
+  return (
+    <span className={`res-contact-item ${itemClassName}`}>
+      <Icon size={15} strokeWidth={2.25} className="res-contact-icon" />
+      <span className="res-contact-text">{text}</span>
+    </span>
+  );
+}
+
+// Wrapping horizontal row — for header/banner-style contact lines that used to be a
+// plain `.join(' · ')` string.
+export function ContactRow({ items, className = '', itemClassName = '' }) {
+  return (
+    <div className={`res-contact-row ${className}`}>
+      {items.map((it) => <ContactItem key={it.key} Icon={it.Icon} text={it.text} itemClassName={itemClassName} />)}
+    </div>
+  );
+}
+
+// One entry per line — for sidebar-style contact blocks that used to `.map` a <div> per line.
+export function ContactList({ items, className = '', itemClassName = '' }) {
+  return (
+    <div className={`res-contact-list ${className}`}>
+      {items.map((it) => <ContactItem key={it.key} Icon={it.Icon} text={it.text} itemClassName={itemClassName} />)}
+    </div>
+  );
 }
 
 export function ExperienceItems({ items }) {

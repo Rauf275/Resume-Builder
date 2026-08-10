@@ -10,7 +10,7 @@
 .port-name { font-family: var(--res-font); font-weight: 700; font-size: calc(30px * var(--res-heading-scale)); letter-spacing: -.01em; color: #1B1F27; }
 .port-title { color: var(--res-accent); font-weight: 700; margin-top: 4px; font-size: 1.02em; }
 .port-rule { width: 48px; height: 3px; background: var(--res-accent); margin: 16px auto; border-radius: 2px; }
-.port-contacts { font-size: .8em; color: #888; letter-spacing: .02em; }
+.port-contacts { font-size: .8em; color: #888; letter-spacing: .02em; justify-content: center; }
 
 .port-block { margin-bottom: 24px; text-align: left; }
 .port-h.res-section-title {

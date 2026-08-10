@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './ledger.css';
 
@@ -22,7 +22,7 @@ export default function Ledger({ resume, customization, pageClass }) {
           </div>
 
           <div className="led-contacts">
-            {contactItems(resume.personal).map((c, i) => <div className="led-contact-row" key={i}>{c}</div>)}
+            <ContactList items={contactItemsWithIcons(resume.personal)} className="led-contact-row" />
           </div>
 
           {side.map((key) => !isSectionEmpty(resume, key) && (

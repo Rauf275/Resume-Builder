@@ -82,3 +82,18 @@
   margin-bottom: 10px;
 }
 
+/* Contact info (email, phone, address, GitHub, LinkedIn, website, Telegram) always
+   renders with a bold, clearly-visible icon — sized well above small meta text and
+   colored with the template's own accent so it reads on screen and in the exported
+   PDF alike, instead of a barely-visible dark-gray glyph. Templates with a colored or
+   dark header banner override --contact-icon-color locally (see e.g. dark.css,
+   foundry.css) so the icon still has real contrast against that background. */
+.res-contact-row, .res-contact-list {
+  --contact-icon-color: var(--res-accent);
+}
+.res-contact-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+.res-contact-list { display: flex; flex-direction: column; gap: 8px; }
+.res-contact-item { display: inline-flex; align-items: center; gap: 6px; }
+.res-contact-icon { color: var(--contact-icon-color); flex-shrink: 0; }
+.res-contact-text { line-height: 1.3; }
+

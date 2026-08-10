@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './portrait.css';
 
@@ -16,7 +16,7 @@ export default function Portrait({ resume, pageClass }) {
         {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
         <div className="port-title">{resume.personal.title}</div>
         <div className="port-rule" />
-        <div className="port-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="port-contacts" />
       </header>
 
       {resume.about && (

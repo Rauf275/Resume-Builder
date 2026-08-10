@@ -4,7 +4,7 @@
 .eleg-name { font-family: var(--res-font); font-weight: 400; font-size: calc(32px * var(--res-heading-scale)); letter-spacing: .02em; color: #1B1F27; }
 .eleg-title { font-style: italic; color: var(--res-accent); margin-top: 4px; font-family: var(--res-font); }
 .eleg-rule { width: 60px; height: 1px; background: #ccc; margin: 14px auto; }
-.eleg-contacts { font-size: .78em; color: #999; letter-spacing: .03em; }
+.eleg-contacts { font-size: .78em; color: #999; letter-spacing: .03em; justify-content: center; }
 .eleg-block { margin-bottom: 24px; text-align: left; }
 .eleg-h.res-section-title { text-align: center; margin-bottom: 14px; }
 .eleg-h.res-section-title span {

@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './dark.css';
 
@@ -32,7 +32,7 @@ export default function Dark({ resume, customization, pageClass }) {
         <aside className="dark-side">
           {resume.personal.photo && <img className="dark-photo" src={resume.personal.photo} alt="" />}
           <div className="dark-contacts">
-            {contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}
+            <ContactList items={contactItemsWithIcons(resume.personal)} className="" />
           </div>
           {side.map((key) => !isSectionEmpty(resume, key) && (
             <div className="dark-side-section" key={key}>

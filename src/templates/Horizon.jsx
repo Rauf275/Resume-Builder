@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
+import { fullName, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './horizon.css';
 
@@ -21,7 +21,7 @@ export default function Horizon({ resume, customization, pageClass }) {
         <h1 className="hz-name">{fullName(resume.personal)}</h1>
         <BirthDateLine resume={resume} />
         <div className="hz-title">{resume.personal.title}</div>
-        <div className="hz-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="hz-contacts" />
       </div>
 
       <div className="hz-grid" style={{ gridTemplateColumns: `1fr ${customization.columnRatio}%` }}>

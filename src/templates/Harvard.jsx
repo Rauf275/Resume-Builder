@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './harvard.css';
 
@@ -9,7 +9,7 @@ export default function Harvard({ resume, pageClass }) {
       <header className="harvard-header">
         <h1 className="harvard-name">{fullName(resume.personal)}</h1>
         {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
-        <div className="harvard-contacts">{contactItems(resume.personal).join(' | ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="harvard-contacts" />
       </header>
       {resume.about && (
         <section className="harvard-block">

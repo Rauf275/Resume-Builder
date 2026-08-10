@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './magazine.css';
 
@@ -26,7 +26,7 @@ export default function Magazine({ resume, customization, pageClass }) {
         </aside>
 
         <div className="mag-main">
-          <div className="mag-contacts">{contactItems(resume.personal).map((c, i) => <span key={i}>{c}</span>)}</div>
+          <ContactRow items={contactItemsWithIcons(resume.personal)} className="mag-contacts" />
 
           {resume.about && (
             <section className="mag-block">

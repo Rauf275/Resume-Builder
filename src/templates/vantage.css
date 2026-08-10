@@ -18,7 +18,7 @@
 .vtg-text { position: relative; }
 .vtg-name { font-family: var(--res-font); font-weight: 700; font-size: calc(25px * var(--res-heading-scale)); color: #fff; }
 .vtg-title { color: #fff; opacity: .88; font-weight: 700; margin-top: 4px; }
-.vtg-contacts { margin-top: 8px; font-size: .78em; color: rgba(255,255,255,.7); }
+.vtg-contacts { margin-top: 8px; font-size: .78em; color: rgba(255,255,255,.7); --contact-icon-color: rgba(255,255,255,.9); }
 
 .vtg-grid { display: grid; }
 .vtg-side { padding: 24px 20px; background: #FAFAF8; border-right: 1px solid #eee; }

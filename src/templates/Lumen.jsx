@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
+import { fullName, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './lumen.css';
 
@@ -15,7 +15,7 @@ export default function Lumen({ resume, pageClass }) {
         <h1 className="lum-name">{fullName(resume.personal)}</h1>
         <BirthDateLine resume={resume} />
         <span className="lum-title-badge">{resume.personal.title}</span>
-        <div className="lum-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="lum-contacts" />
       </header>
 
       {resume.about && (

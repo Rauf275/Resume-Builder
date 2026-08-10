@@ -11,7 +11,7 @@
 .cb-photo-empty { background: rgba(255,255,255,.15); }
 .cb-name { font-family: var(--res-font); font-weight: 700; font-size: calc(26px * var(--res-heading-scale)); color: #fff; }
 .cb-title { color: var(--res-accent); font-weight: 700; margin-top: 3px; }
-.cb-contacts { margin-top: 8px; font-size: .78em; color: rgba(255,255,255,.75); }
+.cb-contacts { margin-top: 8px; font-size: .78em; color: rgba(255,255,255,.75); --contact-icon-color: rgba(255,255,255,.95); }
 
 .cb-grid { display: grid; }
 .cb-main { padding: 26px 28px; }

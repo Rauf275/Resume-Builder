@@ -13,7 +13,7 @@
   color: var(--res-secondary);
   padding: 5px 16px; border-radius: 999px; font-weight: 700; font-size: .82em;
 }
-.lum-contacts { margin-top: 12px; font-size: .78em; color: #999; }
+.lum-contacts { margin-top: 12px; font-size: .78em; color: #999; justify-content: center; }
 
 .lum-card { text-align: left; margin-bottom: 18px; padding: 18px 20px; border-radius: 14px; background: #FAFAF8; }
 .lum-h.res-section-title {

@@ -10,7 +10,7 @@
 .fnd-id { flex: 1; }
 .fnd-name { font-family: var(--font-mono, monospace); font-weight: 700; font-size: calc(21px * var(--res-heading-scale)); }
 .fnd-title { color: var(--res-accent); font-family: var(--font-mono, monospace); font-size: .82em; margin-top: 4px; }
-.fnd-contacts { font-family: var(--font-mono, monospace); font-size: .72em; color: #999; text-align: right; line-height: 1.7; }
+.fnd-contacts { font-family: var(--font-mono, monospace); font-size: .72em; color: #999; text-align: right; line-height: 1.7; --contact-icon-color: var(--res-accent); }
 
 .fnd-grid { display: grid; }
 .fnd-col { padding: 24px 26px; }

@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './executiveFrame.css';
 
@@ -11,7 +11,7 @@ export default function ExecutiveFrame({ resume, pageClass }) {
           <h1 className="ef-name">{fullName(resume.personal)}</h1>
           {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
           <div className="ef-title">{resume.personal.title}</div>
-          <div className="ef-contacts">{contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}</div>
+          <ContactList items={contactItemsWithIcons(resume.personal)} className="ef-contacts" />
         </div>
         <div className="ef-frame">
           {resume.personal.photo ? (

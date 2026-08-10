@@ -19,7 +19,7 @@
 
 .dark-side { background: #0D1117; padding: 30px 22px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #21262D; }
 .dark-photo { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid #30363D; }
-.dark-contacts { display: flex; flex-direction: column; gap: 6px; font-size: .78em; color: #7D8590; word-break: break-word; }
+.dark-contacts { display: flex; flex-direction: column; gap: 6px; font-size: .78em; color: #7D8590; word-break: break-word; --contact-icon-color: var(--res-accent); }
 .dark-side-h.res-section-title {
   font-family: var(--font-mono, monospace); font-size: .78em; color: #7D8590;
   text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid #21262D; padding-bottom: 6px;

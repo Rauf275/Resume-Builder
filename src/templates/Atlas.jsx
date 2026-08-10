@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
+import { fullName, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './atlas.css';
 
@@ -23,7 +23,7 @@ export default function Atlas({ resume, customization, pageClass }) {
             <BirthDateLine resume={resume} />
             <div className="atlas-title">{resume.personal.title}</div>
           </div>
-          <div className="atlas-contacts">{contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}</div>
+          <ContactList items={contactItemsWithIcons(resume.personal)} className="atlas-contacts" />
           {side.map((key) => !isSectionEmpty(resume, key) && (
             <section className="atlas-block" key={key}>
               <h3 className="res-section-title atlas-h">{getSectionTitle(resume, key)}</h3>

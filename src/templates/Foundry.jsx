@@ -1,4 +1,4 @@
-import { fullName, contactItems, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine } from './sectionContent';
+import { fullName, getSectionTitle, getSectionContent, isSectionEmpty, BirthDateLine, ContactList, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './foundry.css';
 
@@ -22,7 +22,7 @@ export default function Foundry({ resume, customization, pageClass }) {
             <BirthDateLine resume={resume} />
           <div className="fnd-title">{resume.personal.title}</div>
         </div>
-        <div className="fnd-contacts">{contactItems(resume.personal).map((c, i) => <div key={i}>{c}</div>)}</div>
+        <ContactList items={contactItemsWithIcons(resume.personal)} className="fnd-contacts" />
       </header>
 
       <div className="fnd-grid" style={{ gridTemplateColumns: `${customization.columnRatio}% 1fr` }}>

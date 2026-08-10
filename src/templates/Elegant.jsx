@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './elegant.css';
 
@@ -12,7 +12,7 @@ export default function Elegant({ resume, pageClass }) {
         {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
         <div className="eleg-title">{resume.personal.title}</div>
         <div className="eleg-rule" />
-        <div className="eleg-contacts">{contactItems(resume.personal).join('   ·   ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="eleg-contacts" />
       </header>
       {resume.about && (
         <section className="eleg-block">

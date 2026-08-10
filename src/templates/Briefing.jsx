@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './briefing.css';
 
@@ -17,7 +17,7 @@ export default function Briefing({ resume, pageClass }) {
       </div>
 
       <div className="bri-strip">
-        {contactItems(resume.personal).map((c, i) => <span className="bri-pill" key={i}>{c}</span>)}
+        <ContactRow items={contactItemsWithIcons(resume.personal)} itemClassName="bri-pill" />
       </div>
 
       {resume.about && (

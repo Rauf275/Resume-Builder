@@ -1,4 +1,4 @@
-import { fullName, contactItems, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty } from './sectionContent';
+import { fullName, formatBirthDate, getSectionTitle, getSectionContent, isSectionEmpty, ContactRow, contactItemsWithIcons } from './sectionContent';
 import { useVisibleSections } from './useVisibleSections';
 import './twoColumnTech.css';
 
@@ -15,7 +15,7 @@ export default function TwoColumnTech({ resume, customization, pageClass }) {
         <h1 className="tech-name">{fullName(resume.personal)}</h1>
         {resume.personal.birthDate && <div className="res-birthdate">Date of birth: {formatBirthDate(resume.personal.birthDate)}</div>}
         <div className="tech-title">{resume.personal.title}</div>
-        <div className="tech-contacts">{contactItems(resume.personal).join('  ·  ')}</div>
+        <ContactRow items={contactItemsWithIcons(resume.personal)} className="tech-contacts" />
       </header>
       <div className="tech-grid" style={{ gridTemplateColumns: `${customization.columnRatio}% 1fr` }}>
         <div className="tech-left">
