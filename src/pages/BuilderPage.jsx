@@ -243,7 +243,7 @@ export default function BuilderPage() {
           <main className="builder-preview-stage">
             <div className="preview-scroll" ref={previewScrollRef}>
               <div className="preview-zoom-wrap" style={{ transform: `scale(${previewRenderScale})` }}>
-                <ResumePreview ref={previewRef} />
+                <ResumePreview />
               </div>
             </div>
           </main>
@@ -274,11 +274,19 @@ export default function BuilderPage() {
           </div>
           <div className="fullscreen-scroll" ref={fullscreenScrollRef}>
             <div className="preview-zoom-wrap" style={{ transform: `scale(${fullscreenRenderScale})` }}>
-              <ResumePreview ref={previewRef} />
+              <ResumePreview />
             </div>
           </div>
         </div>
       )}
+
+      {/* Dedicated node for export capture. Always mounted with real layout dimensions —
+          unlike the two visual previews above (one of which is `display: none` on mobile
+          outside fullscreen), so PDF/HTML export works regardless of viewport size or
+          whether the user has opened the fullscreen preview yet. */}
+      <div className="export-capture-stage" aria-hidden="true">
+        <ResumePreview ref={previewRef} />
+      </div>
     </div>
   );
 }

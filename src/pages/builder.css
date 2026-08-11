@@ -86,6 +86,15 @@
 
 .mobile-preview-fab { display: none; }
 
+/* Off-screen (not display:none) so it always keeps real layout dimensions for
+   html2canvas/outerHTML export, independent of fullscreen state or viewport width. */
+.export-capture-stage {
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
 .fullscreen-overlay {
   position: fixed;
   inset: 0;
