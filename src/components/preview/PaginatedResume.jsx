@@ -75,18 +75,45 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
 
       {/* Visible sheets: one per page, each a fixed-height window onto an
           independent copy of the same content, shifted up by that page's
-          offset so only its slice shows through. */}
+          offset so only its slice shows through.
+
+          Each sheet is two nested boxes, not one: the outer `.resume-sheet`
+          is always a full `pageHeight` tall — that's the physical A4/Letter
+          sheet, and what gives every page (including a mostly-empty last
+          page) its real on-screen size. The inner `.resume-sheet-clip` is
+          only as tall as *this page's actual content* — from this page's
+          offset up to the next page's offset (or, on the last page, up to
+          pageHeight). Without that inner clip, the outer box's own
+          `overflow: hidden` was the only thing cutting the content off, and
+          it always cut at a full pageHeight — well past the next page's
+          break offset, since a break is only ever chosen where it fits
+          *inside* pageHeight (see computeContentBreakOffsets). So the slice
+          of content between "where the next page starts" and "this page's
+          pageHeight-tall bottom edge" rendered twice: once, trailing and cut
+          off, at the bottom of this page, and again, complete, at the top of
+          the next one — the "Certificates clones onto page 2" bug. Clipping
+          to the narrower of the two heights removes that overlap; any
+          leftover space below a page's real content is just blank, same as
+          a printed page whose next section didn't quite fit. */}
       <div className="paginated-resume-sheets">
-        {breaks.map((offset, i) => (
-          <div className="resume-sheet" key={i} style={{ height: pageHeight }}>
-            <div className="resume-sheet-inner" style={{ transform: `translateY(-${offset}px)` }}>
-              <ResumeContent />
+        {breaks.map((offset, i) => {
+          const nextOffset = i + 1 < breaks.length ? breaks[i + 1] : null;
+          const clipHeight = nextOffset != null
+            ? Math.max(1, Math.min(pageHeight, nextOffset - offset))
+            : pageHeight;
+          return (
+            <div className="resume-sheet" key={i} style={{ height: pageHeight }}>
+              <div className="resume-sheet-clip" style={{ height: clipHeight }}>
+                <div className="resume-sheet-inner" style={{ transform: `translateY(-${offset}px)` }}>
+                  <ResumeContent />
+                </div>
+              </div>
+              {breaks.length > 1 && (
+                <div className="resume-sheet-number">{i + 1} / {breaks.length}</div>
+              )}
             </div>
-            {breaks.length > 1 && (
-              <div className="resume-sheet-number">{i + 1} / {breaks.length}</div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

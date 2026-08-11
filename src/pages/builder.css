@@ -120,8 +120,29 @@
     border-right: none;
   }
   /* The inline side-by-side preview never renders on mobile — the fullscreen overlay
-     (triggered by the toolbar icon or the floating Preview button) is the only way to see it. */
-  .builder-preview-stage { display: none; }
+     (triggered by the toolbar icon or the floating Preview button) is the only way to see it.
+     Deliberately NOT `display: none` here: PaginatedResume mounts inside this element a
+     canonical, off-screen copy of the resume (position: fixed, shifted far off-viewport —
+     see .paginated-resume-source-wrap) that both the live pagination math and the PDF/HTML
+     exporters read from. `position: fixed` escapes an ancestor's layout, overflow, and
+     positioning, but it does NOT escape an ancestor's `display: none` — a `display: none`
+     ancestor removes the *entire* subtree from the render tree, fixed descendants included.
+     With `display: none` here, that off-screen copy collapsed to 0×0 on every phone/tablet
+     screen unless the fullscreen preview had already been opened at least once — so tapping
+     Export straight from the toolbar (the obvious, most direct path on mobile) rasterized a
+     blank/zero-size node and silently failed, and the same zero height fed into
+     computeContentBreakOffsets meant no second page was ever computed either. Collapsing this
+     element to zero *visible* size via absolute positioning instead keeps it — and the fixed
+     copy inside it — fully laid out and measurable, just invisible and non-interactive. */
+  .builder-preview-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
   .autosave-note { display: none; }
 
   .mobile-preview-fab {

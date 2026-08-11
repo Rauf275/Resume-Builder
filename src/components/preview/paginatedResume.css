@@ -27,6 +27,14 @@
   box-shadow: var(--shadow-paper);
 }
 
+/* Constrains visible content to this page's actual slice (this page's
+   offset up to the next page's offset), independently of the outer sheet's
+   full pageHeight — see the comment in PaginatedResume.jsx for why this
+   second clip is required. */
+.resume-sheet-clip {
+  overflow: hidden;
+}
+
 .resume-sheet-inner {
   position: relative;
 }
