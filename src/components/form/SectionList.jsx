@@ -13,6 +13,13 @@ import CertificatesForm from './CertificatesForm';
 import ProjectsForm from './ProjectsForm';
 import InterestsForm from './InterestsForm';
 import CustomSectionForm from './CustomSectionForm';
+
+// Same reasoning as CustomSectionForm.jsx: a `|| []` fallback inside a zustand
+// selector allocates a new array every render once the store's own array is
+// ever missing, which reads as a perpetual change and can loop. Kept as a
+// shared stable reference defensively, even though `customSections` is
+// currently always guaranteed to be a real array by the store's migrate/merge.
+const EMPTY_ARRAY = [];
 import AddCustomSectionForm, { CUSTOM_ICON_MAP } from './AddCustomSectionForm';
 
 const ICONS = { Briefcase, GraduationCap, Sparkles, Languages, Award, FolderGit2, Heart };
@@ -50,7 +57,7 @@ export default function SectionList() {
   const setSectionOrder = useResumeStore((s) => s.setSectionOrder);
   const hiddenSections = useResumeStore((s) => s.hiddenSections);
   const toggleSectionVisibility = useResumeStore((s) => s.toggleSectionVisibility);
-  const customSections = useResumeStore((s) => s.resume.customSections || []);
+  const customSections = useResumeStore((s) => s.resume.customSections || EMPTY_ARRAY);
   const updateCustomSectionMeta = useResumeStore((s) => s.updateCustomSectionMeta);
   const removeCustomSection = useResumeStore((s) => s.removeCustomSection);
   const [collapsed, setCollapsed] = useState({});

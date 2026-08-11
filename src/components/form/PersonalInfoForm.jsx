@@ -18,8 +18,32 @@ export default function PersonalInfoForm() {
   function handlePhoto(e) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Photos taken straight from a phone camera can be several MB, and stored
+    // raw as base64 that easily blows past localStorage's per-origin quota
+    // (~5MB in most browsers) once the rest of the resume is added on top —
+    // which corrupts the persisted save and can crash the app on next load.
+    // Downscale + re-encode as JPEG so a typical photo lands well under 500KB
+    // regardless of what the original file looked like.
     const reader = new FileReader();
-    reader.onload = () => updatePersonal('photo', reader.result);
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 640;
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        try {
+          updatePersonal('photo', canvas.toDataURL('image/jpeg', 0.85));
+        } catch {
+          updatePersonal('photo', reader.result);
+        }
+      };
+      img.onerror = () => updatePersonal('photo', reader.result);
+      img.src = reader.result;
+    };
     reader.readAsDataURL(file);
   }
 

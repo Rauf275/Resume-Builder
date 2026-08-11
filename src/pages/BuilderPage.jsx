@@ -105,7 +105,8 @@ export default function BuilderPage() {
       try {
         const data = parseImportedJSON(reader.result);
         loadResume(data);
-      } catch {
+      } catch (err) {
+        console.error('Import failed:', err);
         alert('That file doesn\'t look like a valid Resume Builder Pro JSON export.');
       }
     };

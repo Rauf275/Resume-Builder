@@ -1,6 +1,38 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { DEFAULT_RESUME, DEFAULT_SECTION_ORDER } from '../constants/resumeSchema';
+
+// A resume with a large embedded photo can push the persisted state past
+// localStorage's per-origin quota (~5MB in most browsers, often tighter on
+// mobile). Left unguarded, that setItem() throws QuotaExceededError deep
+// inside zustand's persist middleware — with no error boundary in the app,
+// that crashes the whole render tree to a blank white screen, including on
+// every future load, since the store keeps trying to write the same
+// oversized state. Swallowing the write failure keeps the app alive; the
+// person loses persistence for that session instead of losing the app.
+const safeLocalStorage = {
+  getItem: (name) => {
+    try {
+      return localStorage.getItem(name);
+    } catch {
+      return null;
+    }
+  },
+  setItem: (name, value) => {
+    try {
+      localStorage.setItem(name, value);
+    } catch (err) {
+      console.error('Could not save resume data (storage full or unavailable):', err);
+    }
+  },
+  removeItem: (name) => {
+    try {
+      localStorage.removeItem(name);
+    } catch {
+      // ignore
+    }
+  },
+};
 
 export const useResumeStore = create(
   persist(
@@ -215,6 +247,7 @@ export const useResumeStore = create(
     {
       name: 'resume-builder-pro:data',
       version: 2,
+      storage: createJSONStorage(() => safeLocalStorage),
       partialize: (s) => ({
         resume: s.resume,
         sectionOrder: s.sectionOrder,
