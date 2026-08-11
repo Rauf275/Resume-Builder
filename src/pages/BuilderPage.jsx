@@ -109,6 +109,9 @@ export default function BuilderPage() {
         alert('That file doesn\'t look like a valid Resume Builder Pro JSON export.');
       }
     };
+    reader.onerror = () => {
+      alert('That file couldn\'t be read. Please try selecting it again.');
+    };
     reader.readAsText(file);
     e.target.value = '';
   }
@@ -151,7 +154,13 @@ export default function BuilderPage() {
             previewRef={previewRef}
           />
 
-          <input ref={fileInputRef} type="file" accept="application/json" hidden onChange={handleImport} />
+          {/* accept must list the extension, not just the MIME type: many mobile file
+              providers (Android "Files", iOS Files app, Drive/Telegram downloads, etc.)
+              report .json files as text/plain or application/octet-stream rather than
+              application/json, so an accept filter limited to the MIME type causes the
+              native picker to grey out or hide valid JSON files on phones — the import
+              button effectively stops working there even though it's fine on desktop. */}
+          <input ref={fileInputRef} type="file" accept="application/json,.json" hidden onChange={handleImport} />
           <Button variant="ghost" size="sm" icon={Upload} onClick={() => fileInputRef.current.click()}><span className="import-label">Import</span></Button>
           <Button variant="ghost" size="sm" icon={FileJson} onClick={() => exportJSON({ resume, sectionOrder, hiddenSections })}><span className="save-label">Save JSON</span></Button>
         </div>
