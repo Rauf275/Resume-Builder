@@ -214,8 +214,20 @@ async function exportDOCXInner(resume, sectionOrder, hiddenSections) {
     }
     if (typeof key === 'string' && key.startsWith('custom-')) {
       const meta = (resume.customSections || []).find((s) => s.id === key);
+      if (!meta) return;
+
+      if (meta.type === 'tags') {
+        const tags = (resume.customTags && resume.customTags[key]) || [];
+        if (tags.length === 0) return;
+        children.push(
+          new Paragraph({ heading: HeadingLevel.HEADING_2, text: meta.title }),
+          new Paragraph({ text: tags.join('  ·  '), spacing: { after: 150 } })
+        );
+        return;
+      }
+
       const items = (resume.customItems && resume.customItems[key]) || [];
-      if (!meta || items.length === 0) return;
+      if (items.length === 0) return;
       children.push(new Paragraph({ heading: HeadingLevel.HEADING_2, text: meta.title }));
       items.forEach((it) => {
         children.push(

@@ -21,7 +21,7 @@ export default function GridCards({ resume, pageClass }) {
       {resume.about && (
         <div className="gc-card gc-wide">
           <h3 className="res-section-title gc-h">About</h3>
-          <p className="gc-about">{resume.about}</p>
+          <p className="gc-about res-about">{resume.about}</p>
         </div>
       )}
 

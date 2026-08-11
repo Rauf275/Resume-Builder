@@ -23,7 +23,7 @@ export default function Briefing({ resume, pageClass }) {
       {resume.about && (
         <section className="bri-card">
           <h3 className="res-section-title bri-h">About</h3>
-          <p className="bri-about">{resume.about}</p>
+          <p className="bri-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

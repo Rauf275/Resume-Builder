@@ -1,15 +1,36 @@
 import { Plus } from 'lucide-react';
 import Button from '../ui/Button';
 import { Input, TextArea } from '../ui/Field';
+import TagInput from '../ui/TagInput';
 import EntryCard from './EntryCard';
 import { useResumeStore } from '../../store/useResumeStore';
 import { emptyCustomItem } from '../../constants/resumeSchema';
 
 export default function CustomSectionForm({ sectionId }) {
+  const sectionType = useResumeStore((s) => {
+    const meta = (s.resume.customSections || []).find((sec) => sec.id === sectionId);
+    return meta?.type || 'entries';
+  });
+
+  const tags = useResumeStore((s) => (s.resume.customTags && s.resume.customTags[sectionId]) || []);
+  const addCustomTag = useResumeStore((s) => s.addCustomTag);
+  const removeCustomTag = useResumeStore((s) => s.removeCustomTag);
+
   const items = useResumeStore((s) => (s.resume.customItems && s.resume.customItems[sectionId]) || []);
   const addCustomItem = useResumeStore((s) => s.addCustomItem);
   const updateCustomItem = useResumeStore((s) => s.updateCustomItem);
   const removeCustomItem = useResumeStore((s) => s.removeCustomItem);
+
+  if (sectionType === 'tags') {
+    return (
+      <TagInput
+        tags={tags}
+        onAdd={(v) => addCustomTag(sectionId, v)}
+        onRemove={(i) => removeCustomTag(sectionId, i)}
+        placeholder="Type and press Enter..."
+      />
+    );
+  }
 
   return (
     <div className="section-list">

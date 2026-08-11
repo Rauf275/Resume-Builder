@@ -14,7 +14,7 @@ export default function Minimal({ resume, pageClass }) {
       </header>
       {resume.about && (
         <section className="minimal-block">
-          <p className="minimal-about">{resume.about}</p>
+          <p className="minimal-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

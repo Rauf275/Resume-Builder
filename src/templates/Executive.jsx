@@ -16,7 +16,7 @@ export default function Executive({ resume, pageClass }) {
       </header>
       {resume.about && (
         <section className="exec-block">
-          <p className="exec-about">{resume.about}</p>
+          <p className="exec-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

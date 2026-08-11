@@ -83,13 +83,14 @@ export const useResumeStore = create(
       },
 
       // ---------- Custom (user-defined) sections ----------
-      addCustomSection(title, icon) {
+      addCustomSection(title, icon, type = 'entries') {
         const id = `custom-${crypto.randomUUID()}`;
         set((s) => ({
           resume: {
             ...s.resume,
-            customSections: [...(s.resume.customSections || []), { id, title: title || 'New section', icon: icon || 'Star' }],
+            customSections: [...(s.resume.customSections || []), { id, title: title || 'New section', icon: icon || 'Star', type }],
             customItems: { ...(s.resume.customItems || {}), [id]: [] },
+            customTags: { ...(s.resume.customTags || {}), [id]: [] },
           },
           sectionOrder: [...s.sectionOrder, id],
         }));
@@ -109,11 +110,14 @@ export const useResumeStore = create(
         set((s) => {
           const customItems = { ...(s.resume.customItems || {}) };
           delete customItems[id];
+          const customTags = { ...(s.resume.customTags || {}) };
+          delete customTags[id];
           return {
             resume: {
               ...s.resume,
               customSections: (s.resume.customSections || []).filter((sec) => sec.id !== id),
               customItems,
+              customTags,
             },
             sectionOrder: s.sectionOrder.filter((k) => k !== id),
             hiddenSections: s.hiddenSections.filter((k) => k !== id),
@@ -157,6 +161,35 @@ export const useResumeStore = create(
         }));
       },
 
+      // Tag-style custom sections (mini colored pills, same as Skills/Interests)
+      // store their values in `customTags`, separate from the entry-card
+      // sections in `customItems`, since a "tag" is a plain string, not an
+      // object with title/subtitle/date/description.
+      addCustomTag(sectionId, value) {
+        if (!value.trim()) return;
+        set((s) => ({
+          resume: {
+            ...s.resume,
+            customTags: {
+              ...(s.resume.customTags || {}),
+              [sectionId]: [...((s.resume.customTags || {})[sectionId] || []), value.trim()],
+            },
+          },
+        }));
+      },
+
+      removeCustomTag(sectionId, index) {
+        set((s) => ({
+          resume: {
+            ...s.resume,
+            customTags: {
+              ...(s.resume.customTags || {}),
+              [sectionId]: ((s.resume.customTags || {})[sectionId] || []).filter((_, i) => i !== index),
+            },
+          },
+        }));
+      },
+
       loadResume(data) {
         set({
           resume: {
@@ -164,6 +197,7 @@ export const useResumeStore = create(
             ...data.resume,
             customSections: data.resume?.customSections ?? [],
             customItems: data.resume?.customItems ?? {},
+            customTags: data.resume?.customTags ?? {},
           },
           sectionOrder: data.sectionOrder ?? DEFAULT_SECTION_ORDER,
           hiddenSections: data.hiddenSections ?? [],
@@ -186,9 +220,10 @@ export const useResumeStore = create(
         sectionOrder: s.sectionOrder,
         hiddenSections: s.hiddenSections,
       }),
-      // Anyone who used the app before custom sections existed has old data in
-      // localStorage without `customSections` / `customItems`. Without this, reading
-      // `resume.customItems[someKey]` on load throws and the whole page fails to render.
+      // Anyone who used the app before custom sections (or before tag-style custom
+      // sections) existed has old data in localStorage without `customSections` /
+      // `customItems` / `customTags`. Without this, reading `resume.customItems[someKey]`
+      // on load throws and the whole page fails to render.
       migrate: (persistedState) => {
         const state = persistedState || {};
         return {
@@ -198,6 +233,7 @@ export const useResumeStore = create(
             ...state.resume,
             customSections: state.resume?.customSections ?? [],
             customItems: state.resume?.customItems ?? {},
+            customTags: state.resume?.customTags ?? {},
           },
         };
       },
@@ -212,6 +248,7 @@ export const useResumeStore = create(
             ...persisted.resume,
             customSections: persisted.resume?.customSections ?? [],
             customItems: persisted.resume?.customItems ?? {},
+            customTags: persisted.resume?.customTags ?? {},
           },
         };
       },

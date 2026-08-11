@@ -169,6 +169,7 @@ export const DEMO_RESUME = {
   interests: ['Ceramics', 'Trail running', 'Analog photography'],
   customSections: [],
   customItems: {},
+  customTags: {},
 };
 
 // The actual starting state for a new (or reset) resume in the editor — fully blank,
@@ -196,9 +197,14 @@ export const DEFAULT_RESUME = {
   certificates: [],
   projects: [],
   interests: [],
-  // User-defined sections beyond the built-in ones.
-  // customSections: [{ id: 'custom-xxx', title: 'Publications', icon: 'FileText' }]
-  // customItems: { 'custom-xxx': [{ id, title, subtitle, date, description }] }
+  // User-defined sections beyond the built-in ones. `type` picks how a section
+  // is edited and rendered: 'entries' (default) is a list of title/subtitle/
+  // date/description cards; 'tags' is a flat list of short colored pills, same
+  // as Skills/Interests.
+  // customSections: [{ id: 'custom-xxx', title: 'Publications', icon: 'FileText', type: 'entries' }]
+  // customItems: { 'custom-xxx': [{ id, title, subtitle, date, description }] }  — for type: 'entries'
+  // customTags: { 'custom-xxx': ['Tag one', 'Tag two'] }                        — for type: 'tags'
   customSections: [],
   customItems: {},
+  customTags: {},
 };

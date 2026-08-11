@@ -30,7 +30,7 @@ export default function TwoColumnTech({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="tech-block">
               <h3 className="res-section-title tech-h">About</h3>
-              <p className="tech-about">{resume.about}</p>
+              <p className="tech-about res-about">{resume.about}</p>
             </section>
           )}
           {right.map((key) => !isSectionEmpty(resume, key) && (

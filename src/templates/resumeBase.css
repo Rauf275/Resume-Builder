@@ -76,6 +76,19 @@
 .res-item-date { font-size: .85em; color: #666; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .res-item-sub { font-size: .92em; color: var(--res-accent, #B4813F); font-weight: 600; margin-top: 1px; }
 .res-item-desc { margin-top: 6px; font-size: .95em; color: #3a3a3a; }
+
+/* `pre-line` keeps a blank line/newline the user typed in a textarea (Enter
+   for a new paragraph) as an actual line break in the rendered resume, while
+   still collapsing runs of spaces and wrapping normally at the page edge —
+   plain text otherwise ignores newline characters entirely and runs
+   everything into a single line. `.res-item-desc` covers every entry
+   description (experience, education, projects, certificates, custom
+   entries); `.res-about` is added alongside each template's own About/
+   Profile/Summary paragraph class so that text gets the same treatment
+   without touching that template's own font/color/spacing rules. */
+.res-item-desc, .res-about {
+  white-space: pre-line;
+}
 .res-item-links { display: flex; gap: 12px; margin-top: 4px; font-size: .85em; color: var(--res-secondary, #2E4057); }
 
 .res-tags { display: flex; flex-wrap: wrap; gap: 6px; }

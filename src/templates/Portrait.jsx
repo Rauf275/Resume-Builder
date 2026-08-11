@@ -22,7 +22,7 @@ export default function Portrait({ resume, pageClass }) {
       {resume.about && (
         <section className="port-block">
           <h3 className="res-section-title port-h">About</h3>
-          <p className="port-about">{resume.about}</p>
+          <p className="port-about res-about">{resume.about}</p>
         </section>
       )}
 

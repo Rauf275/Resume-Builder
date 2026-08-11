@@ -24,7 +24,7 @@ export default function Halo({ resume, pageClass }) {
       {resume.about && (
         <section className="halo-block">
           <h3 className="res-section-title halo-h">About</h3>
-          <p className="halo-about">{resume.about}</p>
+          <p className="halo-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

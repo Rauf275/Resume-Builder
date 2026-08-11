@@ -36,7 +36,7 @@ export default function Bulletin({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="bul-block">
               <h3 className="res-section-title bul-h">About</h3>
-              <p className="bul-about">{resume.about}</p>
+              <p className="bul-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

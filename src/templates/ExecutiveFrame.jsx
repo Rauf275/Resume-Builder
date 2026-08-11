@@ -25,7 +25,7 @@ export default function ExecutiveFrame({ resume, pageClass }) {
 
       {resume.about && (
         <section className="ef-block">
-          <p className="ef-about">{resume.about}</p>
+          <p className="ef-about res-about">{resume.about}</p>
         </section>
       )}
 

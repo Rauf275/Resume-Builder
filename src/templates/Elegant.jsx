@@ -16,7 +16,7 @@ export default function Elegant({ resume, pageClass }) {
       </header>
       {resume.about && (
         <section className="eleg-block">
-          <p className="eleg-about">{resume.about}</p>
+          <p className="eleg-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

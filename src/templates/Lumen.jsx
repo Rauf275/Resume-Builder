@@ -21,7 +21,7 @@ export default function Lumen({ resume, pageClass }) {
       {resume.about && (
         <section className="lum-card">
           <h3 className="res-section-title lum-h">About</h3>
-          <p className="lum-about">{resume.about}</p>
+          <p className="lum-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

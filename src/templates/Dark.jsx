@@ -19,7 +19,7 @@ export default function Dark({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="dark-block">
               <h3 className="res-section-title dark-h">About</h3>
-              <p className="dark-about">{resume.about}</p>
+              <p className="dark-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

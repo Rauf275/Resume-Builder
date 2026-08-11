@@ -31,7 +31,7 @@ export default function Magazine({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="mag-block">
               <h3 className="res-section-title mag-h">About</h3>
-              <p className="mag-about">{resume.about}</p>
+              <p className="mag-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

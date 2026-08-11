@@ -35,7 +35,7 @@ export default function Atlas({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="atlas-block">
               <h3 className="res-section-title atlas-h-main">About</h3>
-              <p className="atlas-about">{resume.about}</p>
+              <p className="atlas-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

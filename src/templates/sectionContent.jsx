@@ -215,8 +215,20 @@ export function getSectionTitle(resume, key) {
   return SECTION_TITLES[key] || '';
 }
 
+// Tag-style custom sections (mini colored pills) are opted into via
+// `meta.type === 'tags'` and store their values in `resume.customTags`,
+// separate from the entry-card sections in `resume.customItems`.
+function isCustomTagSection(resume, key) {
+  const meta = (resume.customSections || []).find((s) => s.id === key);
+  return meta?.type === 'tags';
+}
+
 export function getSectionContent(resume, key) {
   if (isCustomKey(key)) {
+    if (isCustomTagSection(resume, key)) {
+      const tags = (resume.customTags && resume.customTags[key]) || [];
+      return <TagList items={tags} />;
+    }
     const items = (resume.customItems && resume.customItems[key]) || [];
     return <CustomItems items={items} />;
   }
@@ -225,6 +237,10 @@ export function getSectionContent(resume, key) {
 
 export function isSectionEmpty(resume, key) {
   if (isCustomKey(key)) {
+    if (isCustomTagSection(resume, key)) {
+      const tags = (resume.customTags && resume.customTags[key]) || [];
+      return tags.length === 0;
+    }
     const items = (resume.customItems && resume.customItems[key]) || [];
     return items.length === 0;
   }

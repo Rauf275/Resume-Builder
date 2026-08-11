@@ -30,7 +30,7 @@ export default function CoverBanner({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="cb-block">
               <h3 className="res-section-title cb-h">Profile</h3>
-              <p className="cb-about">{resume.about}</p>
+              <p className="cb-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

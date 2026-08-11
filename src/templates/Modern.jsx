@@ -34,7 +34,7 @@ export default function Modern({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="modern-block">
               <h3 className="res-section-title modern-main-title">About</h3>
-              <p className="modern-about">{resume.about}</p>
+              <p className="modern-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

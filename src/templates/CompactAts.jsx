@@ -15,7 +15,7 @@ export default function CompactAts({ resume, pageClass }) {
       {resume.about && (
         <section className="cmp-block">
           <h3 className="res-section-title cmp-h">Summary</h3>
-          <p className="cmp-about">{resume.about}</p>
+          <p className="cmp-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

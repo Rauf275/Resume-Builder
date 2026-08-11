@@ -14,7 +14,7 @@ export default function Harvard({ resume, pageClass }) {
       {resume.about && (
         <section className="harvard-block">
           <h3 className="res-section-title harvard-title">Summary</h3>
-          <p className="harvard-about">{resume.about}</p>
+          <p className="harvard-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

@@ -21,7 +21,7 @@ export default function Student({ resume, pageClass }) {
       {resume.about && (
         <section className="stu-block">
           <h3 className="res-section-title stu-h">About me</h3>
-          <p className="stu-about">{resume.about}</p>
+          <p className="stu-about res-about">{resume.about}</p>
         </section>
       )}
       {ordered.map((key) => !isSectionEmpty(resume, key) && (

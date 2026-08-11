@@ -39,7 +39,7 @@ export default function Vantage({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="vtg-block">
               <h3 className="res-section-title vtg-h">Profile</h3>
-              <p className="vtg-about">{resume.about}</p>
+              <p className="vtg-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (

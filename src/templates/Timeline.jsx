@@ -19,7 +19,7 @@ export default function Timeline({ resume, pageClass }) {
 
       {resume.about && (
         <section className="tl-block">
-          <p className="tl-about">{resume.about}</p>
+          <p className="tl-about res-about">{resume.about}</p>
         </section>
       )}
 

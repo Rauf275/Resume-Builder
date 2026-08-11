@@ -38,7 +38,7 @@ export default function Foundry({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="fnd-block">
               <h3 className="res-section-title fnd-h">About</h3>
-              <p className="fnd-about">{resume.about}</p>
+              <p className="fnd-about res-about">{resume.about}</p>
             </section>
           )}
           {right.map((key) => !isSectionEmpty(resume, key) && (

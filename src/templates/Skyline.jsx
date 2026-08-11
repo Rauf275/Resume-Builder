@@ -20,7 +20,7 @@ export default function Skyline({ resume, pageClass }) {
 
       {resume.about && (
         <section className="sky-block">
-          <p className="sky-about">{resume.about}</p>
+          <p className="sky-about res-about">{resume.about}</p>
         </section>
       )}
 

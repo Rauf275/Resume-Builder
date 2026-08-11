@@ -24,7 +24,7 @@ export default function Monogram({ resume, pageClass }) {
       {resume.about && (
         <section className="mono-block">
           <h3 className="res-section-title mono-h">Profile</h3>
-          <p className="mono-about">{resume.about}</p>
+          <p className="mono-about res-about">{resume.about}</p>
         </section>
       )}
       {sections.map((key) => !isSectionEmpty(resume, key) && (

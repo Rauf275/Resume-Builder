@@ -37,7 +37,7 @@ export default function Ledger({ resume, customization, pageClass }) {
           {resume.about && (
             <section className="led-block">
               <h3 className="res-section-title led-h">About</h3>
-              <p className="led-about">{resume.about}</p>
+              <p className="led-about res-about">{resume.about}</p>
             </section>
           )}
           {main.map((key) => !isSectionEmpty(resume, key) && (
