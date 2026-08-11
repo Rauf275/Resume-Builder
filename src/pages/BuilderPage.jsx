@@ -277,7 +277,7 @@ export default function BuilderPage() {
           <main className="builder-preview-stage">
             <div className="preview-scroll" ref={previewScrollRef}>
               <div className="preview-zoom-wrap" style={{ transform: `scale(${previewRenderScale})` }}>
-                <PaginatedResume ref={previewRef} />
+                <PaginatedResume />
               </div>
             </div>
           </main>
@@ -308,11 +308,27 @@ export default function BuilderPage() {
           </div>
           <div className="fullscreen-scroll" ref={fullscreenScrollRef}>
             <div className="preview-zoom-wrap" style={{ transform: `scale(${fullscreenRenderScale})` }}>
-              <PaginatedResume ref={previewRef} />
+              <PaginatedResume />
             </div>
           </div>
         </div>
       )}
+
+      {/* Dedicated, permanently-mounted copy that export (PDF/HTML) and nothing
+          else reads from. The two visible previews above are conditionally
+          rendered (fullscreen vs. inline) and, on mobile, the inline one sits
+          inside `.builder-preview-stage`, which is `display:none` by default —
+          an ancestor with `display:none` stops its whole subtree from being
+          rendered/painted at all, which used to make html2canvas capture a
+          blank/zero-size node (so PDF/HTML export silently failed) whenever a
+          phone user tapped Export without first opening the fullscreen preview.
+          This copy lives outside both conditional branches and is only ever
+          pushed off-screen (see .export-source-only in builder.css), never
+          display:none'd, so it stays paintable — and therefore exportable —
+          no matter what the visible preview is doing. */}
+      <div className="export-source-only" aria-hidden="true">
+        <PaginatedResume ref={previewRef} />
+      </div>
     </div>
   );
 }

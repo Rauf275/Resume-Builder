@@ -8,6 +8,17 @@ function fileName(resume, ext) {
   return `${name.toLowerCase().replace(/\s+/g, '-')}.${ext}`;
 }
 
+// Parses a computed `rgb(...)`/`rgba(...)` color string into a [r, g, b]
+// array for jsPDF's setFillColor, which wants numeric channels rather than a
+// CSS color string. Falls back to white if the format is ever unrecognized
+// (e.g. `transparent`), rather than throwing mid-export.
+function parseRGB(colorStr) {
+  const m = colorStr && colorStr.match(/rgba?\(([^)]+)\)/);
+  if (!m) return [255, 255, 255];
+  const [r, g, b] = m[1].split(',').map((s) => parseFloat(s.trim()));
+  return [r || 0, g || 0, b || 0];
+}
+
 function download(blob, name) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -47,22 +58,50 @@ export async function exportPDF(node, resume, pageSize = 'A4') {
     const imgWidthMm = pageWidth;
     const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
 
-    let heightLeft = imgHeightMm;
-    let position = 0;
+    // Page 1 needs no adjustment — the resume's own top/bottom padding
+    // already reads as margin there. Every page after that used to be cut at
+    // a raw pageHeight multiple with no such padding, jamming continued text
+    // against the page edge — the same crop-boundary issue the live preview
+    // has (see PaginatedResume.jsx, which this mirrors so the PDF keeps
+    // matching what was previewed). Reserve that same padding as blank
+    // margin around every page break here too: measure it from the rendered
+    // `.resume-page`, convert from its CSS px to PDF mm using the image's own
+    // px→mm scale, then leave that much space at the top and bottom of every
+    // page after the first.
+    const pageEl = node.querySelector('.resume-page') || node;
+    const pageStyle = getComputedStyle(pageEl);
+    const pxToMm = imgWidthMm / node.getBoundingClientRect().width;
+    const marginTopMm = (parseFloat(pageStyle.paddingTop) || 0) * pxToMm;
+    const marginBottomMm = (parseFloat(pageStyle.paddingBottom) || 0) * pxToMm;
+    const usableMm = Math.max(1, pageHeight - marginTopMm - marginBottomMm);
+    const bg = parseRGB(pageStyle.backgroundColor);
 
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
-    heightLeft -= pageHeight;
+    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidthMm, imgHeightMm);
+    let coveredMm = pageHeight;
 
     // Sub-millimeter tolerance: without it, an image whose height lands even
-    // a hair over an exact multiple of pageHeight (easy to happen from
+    // a hair over an exact multiple of usableMm (easy to happen from
     // rounding in the canvas → mm conversion above) would trigger one more
     // near-blank trailing page in the PDF.
     const PAGE_OVERFLOW_TOLERANCE_MM = 1;
-    while (heightLeft > PAGE_OVERFLOW_TOLERANCE_MM) {
-      position = heightLeft - imgHeightMm;
+    while (imgHeightMm - coveredMm > PAGE_OVERFLOW_TOLERANCE_MM) {
       pdf.addPage();
+      // Shifts the (whole, unmodified) image up so that content starting at
+      // `coveredMm` in the source lands at `marginTopMm` from this page's
+      // top edge — the same offset math PaginatedResume.jsx uses for the
+      // on-screen crop window.
+      const position = marginTopMm - coveredMm;
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
-      heightLeft -= pageHeight;
+      // The position shift alone isn't enough: rows from the *previous*
+      // page's tail can still land inside this page's top margin band (and,
+      // on the last page, rows past the real content can land in the bottom
+      // band). Painting over both bands with the page's own background color
+      // blanks them cleanly, matching the preview's actual blank gap instead
+      // of leaking a sliver of duplicated text into it.
+      pdf.setFillColor(...bg);
+      pdf.rect(0, 0, pageWidth, marginTopMm, 'F');
+      pdf.rect(0, pageHeight - marginBottomMm, pageWidth, marginBottomMm, 'F');
+      coveredMm += usableMm;
     }
 
     pdf.save(fileName(resume, 'pdf'));

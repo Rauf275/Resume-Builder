@@ -57,6 +57,19 @@
 
 .builder-body { flex: 1; display: grid; grid-template-columns: 420px 1fr; overflow: hidden; position: relative; }
 
+/* Keeps the export-only preview copy paintable (for html2canvas) in every
+   state — mobile with the preview closed, desktop, fullscreen, all of it —
+   without ever being visible or affecting layout. Deliberately `position:
+   fixed` + pushed off-screen rather than `display:none`/`visibility:hidden`:
+   either of those would also stop it from being rendered, which is exactly
+   the bug this fixes (see the comment beside its usage in BuilderPage.jsx). */
+.export-source-only {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
 .builder-panel { background: var(--bg-elevated); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 .panel-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .panel-tabs button {

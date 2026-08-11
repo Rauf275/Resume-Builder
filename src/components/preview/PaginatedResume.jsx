@@ -26,12 +26,24 @@ import './paginatedResume.css';
 // comparison isn't enough to guarantee that on its own.
 const OVERFLOW_TOLERANCE_PX = 3;
 
+// Page 1 looks right because the resume's own top/bottom padding (see
+// `.resume-page` in resumeBase.css) naturally frames it. Every page after
+// that used to be cropped at a raw pixel boundary with no such padding —
+// whatever line of text happened to fall there got slapped against the very
+// top edge of the sheet. Pages 2+ now reserve that same padding as blank
+// space at the top and bottom of their crop window, so a page break looks
+// like an intentional page rather than an arbitrary cut. Read from the
+// rendered page rather than hard-coded so it stays correct if a template
+// ever changes its own padding.
+const DEFAULT_METRICS = { marginTop: 0, marginBottom: 0, usable: null, background: '#fff' };
+
 const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
   const customization = useUIStore((s) => s.customization);
   const pageSizePx = PAGE_SIZE_PX[customization.pageSize] || PAGE_SIZE_PX.A4;
   const pageHeight = pageSizePx.height;
 
   const [pageCount, setPageCount] = useState(1);
+  const [metrics, setMetrics] = useState(DEFAULT_METRICS);
   const sourceRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -47,12 +59,22 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
       // Math.ceil() report a second page for basically every resume, even
       // ones with plenty of room left on page one.
       const contentHeight = el.getBoundingClientRect().height;
-      // A few px of tolerance absorbs that kind of rounding/sub-pixel jitter
-      // (and things like a barely-open text cursor) without masking a real
-      // overflow, which is always much bigger than a few pixels — a whole
-      // extra line of text, at minimum.
+
+      const pageEl = el.querySelector('.resume-page') || el;
+      const pageStyle = getComputedStyle(pageEl);
+      const marginTop = parseFloat(pageStyle.paddingTop) || 0;
+      const marginBottom = parseFloat(pageStyle.paddingBottom) || 0;
+      // Content height available on pages after the first, once that same
+      // top/bottom padding is reserved as blank margin instead of content.
+      const usable = Math.max(1, pageHeight - marginTop - marginBottom);
+      setMetrics({ marginTop, marginBottom, usable, background: pageStyle.backgroundColor || '#fff' });
+
+      // A few px of tolerance absorbs rounding/sub-pixel jitter (and things
+      // like a barely-open text cursor) without masking a real overflow,
+      // which is always much bigger than a few pixels — a whole extra line
+      // of text, at minimum.
       const overflow = Math.max(0, contentHeight - pageHeight - OVERFLOW_TOLERANCE_PX);
-      setPageCount(1 + Math.ceil(overflow / pageHeight));
+      setPageCount(1 + Math.ceil(overflow / usable));
     }
 
     recalc();
@@ -67,6 +89,16 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
     document.fonts?.ready?.then(recalc);
     return () => ro.disconnect();
   }, [pageHeight]);
+
+  // Page 1's crop window is the full physical page (its own padding already
+  // provides the top/bottom margin). Page 2+ crop only `usable` px of new
+  // content each, offset by however much came before, and get an explicit
+  // top gap equal to the page's own margin so the continued text doesn't
+  // start flush against the sheet edge.
+  const usable = metrics.usable ?? pageHeight;
+  const pageSourceOffset = (i) => (i === 0 ? 0 : pageHeight + (i - 1) * usable);
+  const pageWindowHeight = (i) => (i === 0 ? pageHeight : usable);
+  const pageTopGap = (i) => (i === 0 ? 0 : metrics.marginTop);
 
   // Memoized (rather than a plain inline function) so React doesn't call it
   // with null-then-node again on every single render — a new function
@@ -94,9 +126,14 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
           offset so only its slice shows through. */}
       <div className="paginated-resume-sheets">
         {Array.from({ length: pageCount }, (_, i) => (
-          <div className="resume-sheet" key={i} style={{ height: pageHeight }}>
-            <div className="resume-sheet-inner" style={{ transform: `translateY(-${i * pageHeight}px)` }}>
-              <ResumeContent />
+          <div className="resume-sheet" key={i} style={{ height: pageHeight, background: metrics.background }}>
+            <div
+              className="resume-sheet-window"
+              style={{ height: pageWindowHeight(i), marginTop: pageTopGap(i) }}
+            >
+              <div className="resume-sheet-inner" style={{ transform: `translateY(-${pageSourceOffset(i)}px)` }}>
+                <ResumeContent />
+              </div>
             </div>
             {pageCount > 1 && (
               <div className="resume-sheet-number">{i + 1} / {pageCount}</div>
