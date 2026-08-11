@@ -1,71 +1,111 @@
-.custom-section-creator {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 14px;
+.entry-card {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: var(--bg-sunken);
-  margin-top: 4px;
+  background: var(--bg-elevated);
+  overflow: hidden;
 }
-.custom-section-creator-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.section-type-picker {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.section-type-option {
+.entry-card-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--bg-elevated);
-  color: var(--text-muted);
-  text-align: left;
+  gap: 10px;
+  padding: 12px 14px;
   cursor: pointer;
-  transition: border-color .15s ease, color .15s ease, background-color .15s ease;
+  user-select: none;
 }
-.section-type-option:hover { border-color: var(--accent); }
-.section-type-option.active {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent-ink);
+.entry-drag-handle {
+  display: flex; color: var(--text-faint); cursor: grab; touch-action: none;
 }
-.section-type-option-text {
+.entry-drag-handle:active { cursor: grabbing; }
+.entry-card-titles { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.entry-card-title { font-weight: 600; font-size: 13.5px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.entry-card-subtitle { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.entry-chevron { transition: transform .15s ease; color: var(--text-faint); flex-shrink: 0; }
+.entry-chevron.open { transform: rotate(180deg); }
+.entry-card-body {
+  padding: 4px 14px 16px;
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
 }
+.entry-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.entry-row-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; }
+
+.checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-muted); }
+
+.section-block { display: flex; flex-direction: column; gap: 12px; }
+.section-block-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.section-block-head-left { display: flex; align-items: center; gap: 10px; }
+.section-block-icon {
+  width: 30px; height: 30px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-soft); color: var(--accent-ink);
+  flex-shrink: 0;
+}
+.section-block-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; }
+.section-list { display: flex; flex-direction: column; gap: 10px; }
+
+.builder-form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-section-wrapper { border-bottom: 1px solid var(--border); padding-bottom: 22px; }
+.form-section-wrapper:last-child { border-bottom: none; }
+
+.photo-upload {
+  display: flex; align-items: center; gap: 14px;
+}
+.photo-upload-preview {
+  width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
+  background: var(--bg-sunken); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; color: var(--text-faint);
+  flex-shrink: 0;
+}
+.photo-disabled-note {
+  font-size: 12px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.custom-section-creator {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px; border: 1px dashed var(--border); border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+.icon-picker { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.icon-picker-option {
+  display: flex; align-items: center; justify-content: center;
+  height: 32px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  background: var(--bg-elevated); color: var(--text-muted);
+}
+.icon-picker-option:hover { border-color: var(--text-faint); color: var(--text); }
+.icon-picker-option.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+.custom-section-creator-actions { display: flex; gap: 8px; }
+
+.custom-section-meta-edit { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.custom-section-title-input {
+  border: none; background: transparent; font-family: var(--font-display); font-size: 17px; font-weight: 600;
+  color: var(--text); padding: 2px 4px; border-radius: 4px; flex: 1; min-width: 0;
+}
+.custom-section-title-input:focus { outline: none; background: var(--bg-sunken); }
+
+/* Entries vs. Tags picker shown when creating a new custom section — same
+   visual language as .icon-picker-option (border/hover/active) so it reads
+   as part of the same creator panel instead of a different component. */
+.section-type-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.section-type-option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  background: var(--bg-elevated); color: var(--text-muted);
+  text-align: left; cursor: pointer;
+}
+.section-type-option:hover { border-color: var(--text-faint); color: var(--text); }
+.section-type-option.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+.section-type-option-text { display: flex; flex-direction: column; line-height: 1.25; }
 .section-type-option-text strong { font-size: 12.5px; }
 .section-type-option-text small { font-size: 11px; opacity: .8; }
-
-.icon-picker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.icon-picker-option {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--bg-elevated);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: border-color .15s ease, color .15s ease, background-color .15s ease;
-}
-.icon-picker-option:hover { border-color: var(--accent); }
-.icon-picker-option.active {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-}
