@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, ZoomIn, ZoomOut, Maximize2, Minimize2, Download,
-  FileJson, Upload, FileText, FileType, Palette, PenLine, Grid2x2, Eye,
+  FileJson, Upload, FileText, FileType, Palette, PenLine, Grid2x2, Eye, Loader2,
 } from 'lucide-react';
 import PersonalInfoForm from '../components/form/PersonalInfoForm';
 import AboutForm from '../components/form/AboutForm';
 import SectionList from '../components/form/SectionList';
 import CustomizationPanel from '../components/CustomizationPanel';
-import ResumePreview from '../components/preview/ResumePreview';
+import PaginatedResume from '../components/preview/PaginatedResume';
 import Button from '../components/ui/Button';
 import { useResumeStore } from '../store/useResumeStore';
 import { useUIStore } from '../store/useUIStore';
@@ -19,44 +19,28 @@ import { useFitScale, PAGE_SIZE_PX } from '../hooks/useFitScale';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import './builder.css';
 
-// `align` controls which edge the dropdown hangs from: 'left' (mobile, anchored to the
-// button's left edge) or 'right' (desktop, anchored to the button's right edge).
-function ExportMenu({ open, onToggle, onClose, menuRef, resume, sectionOrder, hiddenSections, customization, previewRef, className = '', align = 'left' }) {
-  // The dropdown is positioned with `position: fixed` and coordinates computed here,
-  // rather than `position: absolute` anchored to its own parent. Reason: the mobile
-  // instance of this button lives inside `.toolbar-scroll`, which sets `overflow-x: auto`
-  // — per the CSS spec that forces the paired `overflow-y` to also compute as `auto`
-  // (rather than the default `visible`), so the parent silently becomes a clipping
-  // container. An `absolute`-positioned dropdown taller than the 56px toolbar row was
-  // being clipped there, making it invisible even though `open` was true. `fixed`
-  // positioning escapes that ancestor clipping (no ancestor here sets `transform` /
-  // `filter`, which would otherwise trap it), so this fixes it for both variants.
-  const [menuStyle, setMenuStyle] = useState(null);
-
-  useEffect(() => {
-    if (!open) { setMenuStyle(null); return; }
-    const wrap = menuRef.current;
-    if (!wrap) return;
-    const rect = wrap.getBoundingClientRect();
-    setMenuStyle(
-      align === 'right'
-        ? { position: 'fixed', top: rect.bottom + 8, right: window.innerWidth - rect.right }
-        : { position: 'fixed', top: rect.bottom + 8, left: rect.left }
-    );
-  }, [open, menuRef, align]);
-
+function ExportMenu({ open, onToggle, onClose, menuRef, isExporting, onExportPDF, onExportDOCX, onExportHTML, className = '' }) {
   return (
     <div className={`export-menu-wrap ${className}`} ref={menuRef}>
-      <Button variant="accent" size="sm" icon={Download} onClick={onToggle}>Export</Button>
-      {open && menuStyle && (
-        <div className="export-menu" style={menuStyle}>
-          <button onClick={() => { exportPDF(previewRef.current, resume, customization.pageSize); onClose(); }}>
+      <Button
+        variant="accent"
+        size="sm"
+        icon={isExporting ? Loader2 : Download}
+        className={isExporting ? 'btn-icon-spin' : ''}
+        onClick={onToggle}
+        disabled={isExporting}
+      >
+        {isExporting ? 'Exporting…' : 'Export'}
+      </Button>
+      {open && (
+        <div className="export-menu">
+          <button disabled={isExporting} onClick={() => { onClose(); onExportPDF(); }}>
             <FileText size={14} /> PDF
           </button>
-          <button onClick={() => { exportDOCX(resume, sectionOrder, hiddenSections); onClose(); }}>
+          <button disabled={isExporting} onClick={() => { onClose(); onExportDOCX(); }}>
             <FileType size={14} /> DOCX <span className="menu-note">simplified formatting</span>
           </button>
-          <button onClick={() => { exportHTML(previewRef.current, resume); onClose(); }}>
+          <button disabled={isExporting} onClick={() => { onClose(); onExportHTML(); }}>
             <Grid2x2 size={14} /> HTML
           </button>
         </div>
@@ -68,6 +52,7 @@ function ExportMenu({ open, onToggle, onClose, menuRef, resume, sectionOrder, hi
 export default function BuilderPage() {
   const [tab, setTab] = useState('content');
   const [exportOpen, setExportOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const previewRef = useRef(null);
   const fileInputRef = useRef(null);
   const exportMenuRefMobile = useRef(null);
@@ -86,21 +71,22 @@ export default function BuilderPage() {
   const previewFullscreen = useUIStore((s) => s.previewFullscreen);
   const toggleFullscreen = useUIStore((s) => s.toggleFullscreen);
 
-  // On narrow screens the page (A4/Letter, fixed physical size) is wider — and often
-  // taller — than the viewport, so the raw zoom value (meant for desktop precision
-  // zooming) would force scrolling around to see the whole page. Cap the actual render
-  // scale at whatever fits the container — on desktop the fit is comfortably larger
-  // than the max zoom, so it has no effect there.
+  // On narrow screens the page (A4/Letter, fixed physical size) is wider than the
+  // viewport, so the raw zoom value (meant for desktop precision zooming) would force
+  // horizontal scrolling to see the whole page width. Cap the actual render scale at
+  // whatever fits the container's width — on desktop the fit is comfortably larger
+  // than the max zoom, so it has no effect there. Desktop keeps its existing
+  // scroll-to-zoom behavior in both the inline and fullscreen preview, since zooming in
+  // past 100% there is an intentional feature.
   //
-  // Height is only enforced on mobile, and only for the fullscreen preview (the one
-  // mobile actually uses): that's what makes the whole sheet visible top-to-bottom with
-  // no scrolling at all, matching a shrunk-down A4 page rather than a zoomed-in crop.
-  // Desktop keeps its existing scroll-to-zoom behavior in both the inline and
-  // fullscreen preview, since zooming in past 100% there is an intentional feature.
+  // Height is deliberately not fit here (0 = width-only): the resume can now render as
+  // several stacked page sheets (see PaginatedResume), not always a single page, so
+  // there's no one "whole sheet" height to fit to — the scroll container below just
+  // scrolls through however many pages there are, the way a PDF viewer would.
   const isMobile = useMediaQuery('(max-width: 900px)');
   const pageSizePx = PAGE_SIZE_PX[customization.pageSize] || PAGE_SIZE_PX.A4;
   const [previewScrollRef, previewFitScale] = useFitScale(pageSizePx.width, 0);
-  const [fullscreenScrollRef, fullscreenFitScale] = useFitScale(pageSizePx.width, isMobile ? pageSizePx.height : 0);
+  const [fullscreenScrollRef, fullscreenFitScale] = useFitScale(pageSizePx.width, 0);
   const previewRenderScale = Math.min(previewZoom, previewFitScale);
   const fullscreenRenderScale = Math.min(previewZoom, fullscreenFitScale);
 
@@ -142,6 +128,31 @@ export default function BuilderPage() {
     e.target.value = '';
   }
 
+  // Rasterizing the resume (html2canvas) and building the DOCX are both
+  // synchronous, CPU-heavy work that blocks the main thread — on a phone
+  // this is exactly what made the Export → PDF tap feel like it hung: the
+  // button never visibly reacted before the freeze started, so a tap felt
+  // ignored (and a second, frustrated tap just queued up another heavy
+  // export on top of the first). `runExport` fixes both: it flips on a
+  // loading state and lets two animation frames actually paint — closing
+  // the menu, disabling the buttons, swapping the Export icon to a spinner
+  // — before the heavy work begins, and it ignores taps while one export is
+  // already running instead of stacking them.
+  async function runExport(fn) {
+    if (isExporting) return;
+    setIsExporting(true);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    try {
+      await fn();
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
+  const handleExportPDF = () => runExport(() => exportPDF(previewRef.current, resume, customization.pageSize));
+  const handleExportDOCX = () => runExport(() => exportDOCX(resume, sectionOrder, hiddenSections));
+  const handleExportHTML = () => runExport(() => exportHTML(previewRef.current, resume));
+
   return (
     <div className={`builder-page ${previewFullscreen ? 'is-fullscreen' : ''}`}>
       <div className="builder-toolbar">
@@ -169,16 +180,14 @@ export default function BuilderPage() {
               mobile users reach for most. Hidden on desktop, where Export lives pinned right. */}
           <ExportMenu
             className="export-menu-mobile"
-            align="left"
             open={exportOpen}
             onToggle={() => setExportOpen((o) => !o)}
             onClose={() => setExportOpen(false)}
             menuRef={exportMenuRefMobile}
-            resume={resume}
-            sectionOrder={sectionOrder}
-            hiddenSections={hiddenSections}
-            customization={customization}
-            previewRef={previewRef}
+            isExporting={isExporting}
+            onExportPDF={handleExportPDF}
+            onExportDOCX={handleExportDOCX}
+            onExportHTML={handleExportHTML}
           />
 
           {/* accept must list the extension, not just the MIME type: many mobile file
@@ -197,16 +206,14 @@ export default function BuilderPage() {
         <div className="toolbar-end">
           <ExportMenu
             className="export-menu-desktop"
-            align="right"
             open={exportOpen}
             onToggle={() => setExportOpen((o) => !o)}
             onClose={() => setExportOpen(false)}
             menuRef={exportMenuRefDesktop}
-            resume={resume}
-            sectionOrder={sectionOrder}
-            hiddenSections={hiddenSections}
-            customization={customization}
-            previewRef={previewRef}
+            isExporting={isExporting}
+            onExportPDF={handleExportPDF}
+            onExportDOCX={handleExportDOCX}
+            onExportHTML={handleExportHTML}
           />
         </div>
       </div>
@@ -270,7 +277,7 @@ export default function BuilderPage() {
           <main className="builder-preview-stage">
             <div className="preview-scroll" ref={previewScrollRef}>
               <div className="preview-zoom-wrap" style={{ transform: `scale(${previewRenderScale})` }}>
-                <ResumePreview />
+                <PaginatedResume ref={previewRef} />
               </div>
             </div>
           </main>
@@ -301,19 +308,11 @@ export default function BuilderPage() {
           </div>
           <div className="fullscreen-scroll" ref={fullscreenScrollRef}>
             <div className="preview-zoom-wrap" style={{ transform: `scale(${fullscreenRenderScale})` }}>
-              <ResumePreview />
+              <PaginatedResume ref={previewRef} />
             </div>
           </div>
         </div>
       )}
-
-      {/* Dedicated node for export capture. Always mounted with real layout dimensions —
-          unlike the two visual previews above (one of which is `display: none` on mobile
-          outside fullscreen), so PDF/HTML export works regardless of viewport size or
-          whether the user has opened the fullscreen preview yet. */}
-      <div className="export-capture-stage" aria-hidden="true">
-        <ResumePreview ref={previewRef} />
-      </div>
     </div>
   );
 }

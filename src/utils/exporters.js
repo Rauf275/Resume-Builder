@@ -23,7 +23,21 @@ function download(blob, name) {
 export async function exportPDF(node, resume, pageSize = 'A4') {
   try {
     if (document.fonts?.ready) { await document.fonts.ready; }
-    const canvas = await html2canvas(node, { scale: 2.5, useCORS: true, backgroundColor: '#ffffff' });
+    // Let the caller's loading state (spinner, disabled buttons) actually paint
+    // before the heavy synchronous rasterization below blocks the main thread —
+    // without this, the tap that triggered the export can feel like it did
+    // nothing right up until the freeze ends. Harmless if the caller already
+    // yielded a frame itself.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    // html2canvas's cost scales with the square of `scale` — 2.5x renders ~64%
+    // more pixels than 2x. On phones (slower CPUs, and where this rasterization
+    // is most noticeable as UI jank since there's no other tab/window to absorb
+    // the freeze) a lower scale cuts that work down substantially while still
+    // producing a crisp, print-quality PDF (2x is ~180dpi at these page sizes).
+    // Desktops keep the higher-fidelity 2.5x since they have the headroom for it.
+    const scale = window.innerWidth < 700 ? 2 : 2.5;
+    const canvas = await html2canvas(node, { scale, useCORS: true, backgroundColor: '#ffffff' });
     const imgData = canvas.toDataURL('image/jpeg', 0.96);
 
     const pdf = new jsPDF({ unit: 'mm', format: pageSize.toLowerCase() === 'letter' ? 'letter' : 'a4' });

@@ -1,0 +1,47 @@
+.paginated-resume {
+  position: relative;
+}
+
+/* Off-screen, not hidden: visibility:hidden/display:none would also make
+   html2canvas render this copy blank when exportPDF/exportHTML read it,
+   since it clones the live element's computed style. Pushing it far outside
+   the viewport keeps it fully paintable while never being seen or
+   interactable. */
+.paginated-resume-source-wrap {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
+.paginated-resume-sheets {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.resume-sheet {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow-paper);
+}
+
+.resume-sheet-inner {
+  position: relative;
+}
+
+.resume-sheet-number {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .55);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}

@@ -34,14 +34,8 @@
 .toolbar-end { display: flex; align-items: center; flex-shrink: 0; }
 
 .export-menu-wrap { position: relative; }
-/* Position (top/left/right) is set inline via JS (see ExportMenu in BuilderPage.jsx) using
-   `position: fixed` and a getBoundingClientRect() measurement, not anchored here with
-   `absolute`. The mobile button lives inside `.toolbar-scroll`, which sets `overflow-x: auto`
-   — the CSS spec then forces the paired `overflow-y` to compute as `auto` too, turning that
-   row into a clipping container that silently hid an `absolute`-positioned dropdown taller
-   than the 56px toolbar. `fixed` positioning (computed in JS, not here) escapes that. */
 .export-menu {
-  width: 220px;
+  position: absolute; left: 0; top: calc(100% + 8px); width: 220px;
   background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg); padding: 6px; display: flex; flex-direction: column; z-index: 50;
 }
@@ -51,6 +45,10 @@
 }
 .export-menu button:hover { background: var(--bg-sunken); }
 .menu-note { margin-left: auto; font-size: 10px; color: var(--text-faint); font-weight: 400; }
+
+/* The desktop Export button sits at the far right corner, so its menu would overflow the
+   viewport if it opened from the left edge like the mobile one does — anchor it to the right. */
+.export-menu-desktop .export-menu { left: auto; right: 0; }
 
 /* Export lives in two possible spots — inline next to the fullscreen toggle on mobile, or
    pinned to the toolbar's right corner on desktop — toggled by the breakpoint below. */
@@ -84,18 +82,13 @@
 
 .builder-preview-stage { overflow: auto; background: var(--bg-sunken); position: relative; }
 .preview-scroll { min-height: 100%; display: flex; justify-content: center; padding: 36px 24px; }
-.preview-zoom-wrap { transform-origin: top center; height: fit-content; box-shadow: var(--shadow-paper); }
+/* No box-shadow here anymore — with multi-page resumes now rendered as
+   separate stacked sheets (see PaginatedResume.jsx / paginatedResume.css),
+   a single shadow around the whole wrap would draw one card behind every
+   page and the gaps between them. Each sheet carries its own shadow instead. */
+.preview-zoom-wrap { transform-origin: top center; height: fit-content; }
 
 .mobile-preview-fab { display: none; }
-
-/* Off-screen (not display:none) so it always keeps real layout dimensions for
-   html2canvas/outerHTML export, independent of fullscreen state or viewport width. */
-.export-capture-stage {
-  position: absolute;
-  top: 0;
-  left: -10000px;
-  pointer-events: none;
-}
 
 .fullscreen-overlay {
   position: fixed;

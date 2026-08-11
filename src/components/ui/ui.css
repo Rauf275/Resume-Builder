@@ -34,6 +34,16 @@
 
 .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 
+/* Export button while a PDF/DOCX/HTML export is running (see BuilderPage's
+   runExport) — spins the leading icon (swapped to Loader2) so the button
+   visibly shows it registered the tap and is working, instead of just
+   sitting there disabled with no feedback while the export runs. */
+.btn-icon-spin svg { animation: btn-icon-spin .8s linear infinite; }
+@keyframes btn-icon-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .field {
   display: flex;
   flex-direction: column;
