@@ -33,6 +33,16 @@
 //    a printed two-column resume would).
 const TOLERANCE_PX = 3;
 
+// Continuation pages (page 2, 3, ...) get a blank visual gap above their
+// content — see the comment on CONTINUATION_TOP_GAP_PX in
+// PaginatedResume.jsx for why. That gap eats into how much a continuation
+// page can actually hold, so its usable budget is pageHeight minus the gap,
+// not the full pageHeight. Page 1 is unaffected — it already gets its own
+// top breathing room from the template's own page padding — so its budget
+// stays the full pageHeight. Exported so PaginatedResume.jsx and the PDF
+// exporter both size the gap identically instead of each guessing a value.
+export const CONTINUATION_TOP_GAP_PX = 40;
+
 function unitsFromRoot(root, rootRect) {
   const titles = Array.from(root.querySelectorAll('.res-section-title'));
   if (titles.length === 0) {
@@ -95,7 +105,13 @@ export function computeContentBreakOffsets(root, pageHeight) {
   let guard = 0;
   while (pageStart < totalHeight - TOLERANCE_PX && guard < 200) {
     guard += 1;
-    const limit = pageStart + pageHeight;
+    // pageStart === 0 is page 1, budgeted with the full pageHeight. Every
+    // page after that (pageStart > 0) is a continuation page, which loses
+    // CONTINUATION_TOP_GAP_PX of usable height to its own top gap — without
+    // this, a section could be judged "fits" against the full pageHeight
+    // and then actually get clipped once that gap is rendered in.
+    const budget = pageStart === 0 ? pageHeight : pageHeight - CONTINUATION_TOP_GAP_PX;
+    const limit = pageStart + budget;
     if (limit >= totalHeight - TOLERANCE_PX) break;
 
     // Prefer the furthest safe candidate that still fits within this page.

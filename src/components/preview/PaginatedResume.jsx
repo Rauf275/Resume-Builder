@@ -2,7 +2,7 @@ import { forwardRef, useCallback, useLayoutEffect, useRef, useState } from 'reac
 import ResumeContent from './ResumeContent';
 import { useUIStore } from '../../store/useUIStore';
 import { PAGE_SIZE_PX } from '../../hooks/useFitScale';
-import { computeContentBreakOffsets } from '../../utils/paginate';
+import { computeContentBreakOffsets, CONTINUATION_TOP_GAP_PX } from '../../utils/paginate';
 import './paginatedResume.css';
 
 // The "create resume" preview used to render the resume as one continuously
@@ -98,12 +98,31 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
       <div className="paginated-resume-sheets">
         {breaks.map((offset, i) => {
           const nextOffset = i + 1 < breaks.length ? breaks[i + 1] : null;
+          // Page 1 starts right at the top of its sheet — it already gets
+          // its own breathing room from the template's own page padding
+          // (15mm, baked into .resume-page in resumeBase.css). A
+          // continuation page (i > 0) has no such padding of its own: its
+          // slice of content was sitting mid-flow on the *unclipped* source
+          // copy, so without help it renders flush against the sheet's top
+          // edge — a section title landing right on the fold looks cramped
+          // and, worse, visually indistinguishable from a page that simply
+          // continues an unfinished paragraph. Reserving a blank gap here
+          // (padding-top, counted inside the clip's own height via
+          // box-sizing: border-box in the CSS) gives every continuation
+          // page the same kind of top margin page 1 gets "for free".
+          // computeContentBreakOffsets already accounts for this same gap
+          // when deciding how much content a continuation page can safely
+          // hold (see CONTINUATION_TOP_GAP_PX in utils/paginate.js), so the
+          // two stay in sync: extra padding-top for a continuation page
+          // was empty space nobody planned for on that page (this is what
+          // could cause overflow or a phantom near-empty trailing page).
+          const gap = i > 0 ? CONTINUATION_TOP_GAP_PX : 0;
           const clipHeight = nextOffset != null
-            ? Math.max(1, Math.min(pageHeight, nextOffset - offset))
+            ? Math.max(1, Math.min(pageHeight, (nextOffset - offset) + gap))
             : pageHeight;
           return (
             <div className="resume-sheet" key={i} style={{ height: pageHeight }}>
-              <div className="resume-sheet-clip" style={{ height: clipHeight }}>
+              <div className="resume-sheet-clip" style={{ height: clipHeight, paddingTop: gap }}>
                 <div className="resume-sheet-inner" style={{ transform: `translateY(-${offset}px)` }}>
                   <ResumeContent />
                 </div>

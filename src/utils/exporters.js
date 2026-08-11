@@ -3,7 +3,7 @@ import jsPDF from 'jspdf';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
 import { formatMonth, formatBirthDate, contactItems } from '../templates/sectionContent';
 import { PAGE_SIZE_PX } from '../hooks/useFitScale';
-import { computeContentBreakOffsets } from './paginate';
+import { computeContentBreakOffsets, CONTINUATION_TOP_GAP_PX } from './paginate';
 
 function fileName(resume, ext) {
   const name = [resume.personal.firstName, resume.personal.lastName].filter(Boolean).join('-') || 'resume';
@@ -81,7 +81,18 @@ export async function exportPDF(node, resume, pageSize = 'A4') {
       const pageImgHeightMm = sh * mmPerCanvasPx;
 
       if (i > 0) pdf.addPage();
-      pdf.addImage(pageImgData, 'JPEG', 0, 0, pageWidthMm, pageImgHeightMm);
+      // Continuation pages (i > 0) get the same blank top gap the on-screen
+      // preview draws (see PaginatedResume.jsx / CONTINUATION_TOP_GAP_PX) —
+      // computeContentBreakOffsets already reserved this much room when it
+      // decided where this page's content could end, so without offsetting
+      // the image down here too, the PDF would pack more content per page
+      // than the preview shows and the two would disagree on where pages
+      // break, exactly the mismatch this pagination rewrite is meant to
+      // avoid. Converted from CSS px (the coordinate system breaksPx and the
+      // gap constant are both in) to mm via the same two ratios already
+      // used for the image itself, so it lines up at any export scale.
+      const topOffsetMm = i > 0 ? CONTINUATION_TOP_GAP_PX * pxPerCssPx * mmPerCanvasPx : 0;
+      pdf.addImage(pageImgData, 'JPEG', 0, topOffsetMm, pageWidthMm, pageImgHeightMm);
     }
 
     pdf.save(fileName(resume, 'pdf'));

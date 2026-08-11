@@ -33,6 +33,11 @@
    second clip is required. */
 .resume-sheet-clip {
   overflow: hidden;
+  /* border-box so a continuation page's inline padding-top (the blank gap
+     above its content — see PaginatedResume.jsx) is counted inside the
+     height that's already been sized to fit the page, instead of adding on
+     top of it and pushing content past pageHeight. */
+  box-sizing: border-box;
 }
 
 .resume-sheet-inner {
