@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, ZoomIn, ZoomOut, Maximize2, Minimize2, Download,
@@ -19,10 +20,48 @@ import { useFitScale, PAGE_SIZE_PX } from '../hooks/useFitScale';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import './builder.css';
 
-function ExportMenu({ open, onToggle, onClose, menuRef, isExporting, onExportPDF, onExportDOCX, onExportHTML, className = '' }) {
+function ExportMenu({ open, onToggle, onClose, menuRef, isExporting, onExportPDF, onExportDOCX, onExportHTML, className = '', align = 'left' }) {
+  const triggerRef = useRef(null);
+  const [menuPos, setMenuPos] = useState(null);
+
+  // The dropdown used to be a plain absolutely-positioned child of this
+  // wrapper. That's fine on desktop, but on mobile the wrapper sits inside
+  // `.toolbar-scroll`, which sets `overflow-x: auto` so the toolbar can be
+  // swiped horizontally on narrow screens — and per the CSS spec, setting
+  // overflow on just one axis makes the browser clip the *other* axis too
+  // (overflow-y effectively becomes `auto`/hidden as well). Since the
+  // toolbar row is only as tall as its own contents, that silently clipped
+  // the dropdown to zero visible height: tapping "Export" toggled it open,
+  // but the PDF/DOCX/HTML buttons were never actually visible or reachable
+  // — the button "did nothing" from the user's point of view. Portaling the
+  // menu to <body> and positioning it with `fixed` coordinates (computed
+  // from the trigger button's own on-screen position) sidesteps every
+  // ancestor's overflow/clipping entirely, on any screen size.
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current) { setMenuPos(null); return; }
+
+    function place() {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setMenuPos({
+        top: rect.bottom + 8,
+        left: align === 'right' ? undefined : rect.left,
+        right: align === 'right' ? window.innerWidth - rect.right : undefined,
+      });
+    }
+
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
+  }, [open, align]);
+
   return (
     <div className={`export-menu-wrap ${className}`} ref={menuRef}>
       <Button
+        ref={triggerRef}
         variant="accent"
         size="sm"
         icon={isExporting ? Loader2 : Download}
@@ -32,8 +71,8 @@ function ExportMenu({ open, onToggle, onClose, menuRef, isExporting, onExportPDF
       >
         {isExporting ? 'Exporting…' : 'Export'}
       </Button>
-      {open && (
-        <div className="export-menu">
+      {open && menuPos && createPortal(
+        <div className="export-menu export-menu-portal" style={{ top: menuPos.top, left: menuPos.left, right: menuPos.right }}>
           <button disabled={isExporting} onClick={() => { onClose(); onExportPDF(); }}>
             <FileText size={14} /> PDF
           </button>
@@ -43,7 +82,8 @@ function ExportMenu({ open, onToggle, onClose, menuRef, isExporting, onExportPDF
           <button disabled={isExporting} onClick={() => { onClose(); onExportHTML(); }}>
             <Grid2x2 size={14} /> HTML
           </button>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -102,7 +142,13 @@ export default function BuilderPage() {
     function onClickOutside(e) {
       const insideMobile = exportMenuRefMobile.current && exportMenuRefMobile.current.contains(e.target);
       const insideDesktop = exportMenuRefDesktop.current && exportMenuRefDesktop.current.contains(e.target);
-      if (!insideMobile && !insideDesktop) setExportOpen(false);
+      // The dropdown itself is portaled to document.body (see ExportMenu),
+      // so it's no longer a DOM descendant of either wrap ref above — only
+      // the trigger button is. Without this check, any tap on a PDF/DOCX/
+      // HTML menu item would register as an "outside" click and close the
+      // menu before its own onClick could run.
+      const insideMenu = !!e.target.closest?.('.export-menu');
+      if (!insideMobile && !insideDesktop && !insideMenu) setExportOpen(false);
     }
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
@@ -206,6 +252,7 @@ export default function BuilderPage() {
         <div className="toolbar-end">
           <ExportMenu
             className="export-menu-desktop"
+            align="right"
             open={exportOpen}
             onToggle={() => setExportOpen((o) => !o)}
             onClose={() => setExportOpen(false)}
@@ -277,7 +324,7 @@ export default function BuilderPage() {
           <main className="builder-preview-stage">
             <div className="preview-scroll" ref={previewScrollRef}>
               <div className="preview-zoom-wrap" style={{ transform: `scale(${previewRenderScale})` }}>
-                <PaginatedResume />
+                <PaginatedResume ref={previewRef} />
               </div>
             </div>
           </main>
@@ -308,27 +355,11 @@ export default function BuilderPage() {
           </div>
           <div className="fullscreen-scroll" ref={fullscreenScrollRef}>
             <div className="preview-zoom-wrap" style={{ transform: `scale(${fullscreenRenderScale})` }}>
-              <PaginatedResume />
+              <PaginatedResume ref={previewRef} />
             </div>
           </div>
         </div>
       )}
-
-      {/* Dedicated, permanently-mounted copy that export (PDF/HTML) and nothing
-          else reads from. The two visible previews above are conditionally
-          rendered (fullscreen vs. inline) and, on mobile, the inline one sits
-          inside `.builder-preview-stage`, which is `display:none` by default —
-          an ancestor with `display:none` stops its whole subtree from being
-          rendered/painted at all, which used to make html2canvas capture a
-          blank/zero-size node (so PDF/HTML export silently failed) whenever a
-          phone user tapped Export without first opening the fullscreen preview.
-          This copy lives outside both conditional branches and is only ever
-          pushed off-screen (see .export-source-only in builder.css), never
-          display:none'd, so it stays paintable — and therefore exportable —
-          no matter what the visible preview is doing. */}
-      <div className="export-source-only" aria-hidden="true">
-        <PaginatedResume ref={previewRef} />
-      </div>
     </div>
   );
 }

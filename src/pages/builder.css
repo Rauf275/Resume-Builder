@@ -34,10 +34,18 @@
 .toolbar-end { display: flex; align-items: center; flex-shrink: 0; }
 
 .export-menu-wrap { position: relative; }
+/* Portaled to <body> (see ExportMenu in BuilderPage.jsx) and positioned with
+   `fixed` coordinates computed from the trigger button's own screen
+   position, in an inline style — top/left/right below are just the shared
+   look, not the placement. Portaling matters most on mobile: the trigger
+   lives inside `.toolbar-scroll`, whose `overflow-x: auto` implicitly clips
+   overflow-y too, which used to hide this menu entirely (see the comment
+   in BuilderPage.jsx) even though toggling it "worked" and the tap on
+   Export wasn't actually being ignored. */
 .export-menu {
-  position: absolute; left: 0; top: calc(100% + 8px); width: 220px;
+  position: fixed; width: 220px;
   background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg); padding: 6px; display: flex; flex-direction: column; z-index: 50;
+  box-shadow: var(--shadow-lg); padding: 6px; display: flex; flex-direction: column; z-index: 500;
 }
 .export-menu button {
   display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--radius-sm);
@@ -46,29 +54,12 @@
 .export-menu button:hover { background: var(--bg-sunken); }
 .menu-note { margin-left: auto; font-size: 10px; color: var(--text-faint); font-weight: 400; }
 
-/* The desktop Export button sits at the far right corner, so its menu would overflow the
-   viewport if it opened from the left edge like the mobile one does — anchor it to the right. */
-.export-menu-desktop .export-menu { left: auto; right: 0; }
-
 /* Export lives in two possible spots — inline next to the fullscreen toggle on mobile, or
    pinned to the toolbar's right corner on desktop — toggled by the breakpoint below. */
 .export-menu-mobile { display: none; }
 .export-menu-desktop { display: flex; }
 
 .builder-body { flex: 1; display: grid; grid-template-columns: 420px 1fr; overflow: hidden; position: relative; }
-
-/* Keeps the export-only preview copy paintable (for html2canvas) in every
-   state — mobile with the preview closed, desktop, fullscreen, all of it —
-   without ever being visible or affecting layout. Deliberately `position:
-   fixed` + pushed off-screen rather than `display:none`/`visibility:hidden`:
-   either of those would also stop it from being rendered, which is exactly
-   the bug this fixes (see the comment beside its usage in BuilderPage.jsx). */
-.export-source-only {
-  position: fixed;
-  top: 0;
-  left: -10000px;
-  pointer-events: none;
-}
 
 .builder-panel { background: var(--bg-elevated); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 .panel-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }

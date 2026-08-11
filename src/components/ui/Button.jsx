@@ -1,6 +1,7 @@
+import { forwardRef } from 'react';
 import './ui.css';
 
-export default function Button({
+const Button = forwardRef(function Button({
   children,
   variant = 'primary',
   size = 'md',
@@ -8,9 +9,10 @@ export default function Button({
   iconOnly = false,
   className = '',
   ...props
-}) {
+}, ref) {
   return (
     <button
+      ref={ref}
       className={`btn btn-${variant} btn-${size} ${iconOnly ? 'btn-icon-only' : ''} ${className}`}
       {...props}
     >
@@ -18,4 +20,6 @@ export default function Button({
       {!iconOnly && children}
     </button>
   );
-}
+});
+
+export default Button;

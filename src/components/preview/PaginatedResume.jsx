@@ -2,6 +2,7 @@ import { forwardRef, useCallback, useLayoutEffect, useRef, useState } from 'reac
 import ResumeContent from './ResumeContent';
 import { useUIStore } from '../../store/useUIStore';
 import { PAGE_SIZE_PX } from '../../hooks/useFitScale';
+import { computeContentBreakOffsets } from '../../utils/paginate';
 import './paginatedResume.css';
 
 // The "create resume" preview used to render the resume as one continuously
@@ -13,37 +14,21 @@ import './paginatedResume.css';
 // the live preview match the export instead.
 //
 // It does this the same way the PDF export does: render the full resume once,
-// then slice that rendered result into fixed-height windows, one per page.
-// Each window is a fixed-height, overflow-hidden "sheet" containing a full
-// copy of the resume shifted up by however many page-heights come before it,
-// so only that page's slice is visible — a plain CSS crop, not a real
-// re-flow, which is exactly what the raster PDF export does too. That keeps
-// preview and PDF output pixel-for-pixel consistent, and it works for every
-// template without any of them needing to know about pagination.
-//
-// A page is only added once content genuinely overflows the previous one —
-// see the OVERFLOW_TOLERANCE_PX note below for why a plain height/pageHeight
-// comparison isn't enough to guarantee that on its own.
-const OVERFLOW_TOLERANCE_PX = 3;
-
-// Page 1 looks right because the resume's own top/bottom padding (see
-// `.resume-page` in resumeBase.css) naturally frames it. Every page after
-// that used to be cropped at a raw pixel boundary with no such padding —
-// whatever line of text happened to fall there got slapped against the very
-// top edge of the sheet. Pages 2+ now reserve that same padding as blank
-// space at the top and bottom of their crop window, so a page break looks
-// like an intentional page rather than an arbitrary cut. Read from the
-// rendered page rather than hard-coded so it stays correct if a template
-// ever changes its own padding.
-const DEFAULT_METRICS = { marginTop: 0, marginBottom: 0, usable: null, background: '#fff' };
-
+// then slice that rendered result into windows, one per page. Each window is
+// a fixed-height, overflow-hidden "sheet" containing a full copy of the
+// resume shifted up by that page's break offset, so only that page's slice
+// is visible. The offsets themselves come from computeContentBreakOffsets
+// (utils/paginate.js), which is the same function the PDF exporter uses on
+// the same source node — so a page break always falls between sections (or
+// between entries inside an oversized one), never through the middle of
+// one, and the live preview and the exported PDF always agree on exactly
+// where each page starts.
 const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
   const customization = useUIStore((s) => s.customization);
   const pageSizePx = PAGE_SIZE_PX[customization.pageSize] || PAGE_SIZE_PX.A4;
   const pageHeight = pageSizePx.height;
 
-  const [pageCount, setPageCount] = useState(1);
-  const [metrics, setMetrics] = useState(DEFAULT_METRICS);
+  const [breaks, setBreaks] = useState([0]);
   const sourceRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -51,30 +36,7 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
     if (!el) return;
 
     function recalc() {
-      // getBoundingClientRect gives the real, fractional rendered height.
-      // scrollHeight (used originally) is rounded to a whole pixel by the
-      // browser, and `.resume-page`'s `min-height: 297mm` sits so close to
-      // that exact page height that the rounding alone was enough to tip
-      // scrollHeight a fraction of a pixel past pageHeight — which made
-      // Math.ceil() report a second page for basically every resume, even
-      // ones with plenty of room left on page one.
-      const contentHeight = el.getBoundingClientRect().height;
-
-      const pageEl = el.querySelector('.resume-page') || el;
-      const pageStyle = getComputedStyle(pageEl);
-      const marginTop = parseFloat(pageStyle.paddingTop) || 0;
-      const marginBottom = parseFloat(pageStyle.paddingBottom) || 0;
-      // Content height available on pages after the first, once that same
-      // top/bottom padding is reserved as blank margin instead of content.
-      const usable = Math.max(1, pageHeight - marginTop - marginBottom);
-      setMetrics({ marginTop, marginBottom, usable, background: pageStyle.backgroundColor || '#fff' });
-
-      // A few px of tolerance absorbs rounding/sub-pixel jitter (and things
-      // like a barely-open text cursor) without masking a real overflow,
-      // which is always much bigger than a few pixels — a whole extra line
-      // of text, at minimum.
-      const overflow = Math.max(0, contentHeight - pageHeight - OVERFLOW_TOLERANCE_PX);
-      setPageCount(1 + Math.ceil(overflow / usable));
+      setBreaks(computeContentBreakOffsets(el, pageHeight));
     }
 
     recalc();
@@ -89,16 +51,6 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
     document.fonts?.ready?.then(recalc);
     return () => ro.disconnect();
   }, [pageHeight]);
-
-  // Page 1's crop window is the full physical page (its own padding already
-  // provides the top/bottom margin). Page 2+ crop only `usable` px of new
-  // content each, offset by however much came before, and get an explicit
-  // top gap equal to the page's own margin so the continued text doesn't
-  // start flush against the sheet edge.
-  const usable = metrics.usable ?? pageHeight;
-  const pageSourceOffset = (i) => (i === 0 ? 0 : pageHeight + (i - 1) * usable);
-  const pageWindowHeight = (i) => (i === 0 ? pageHeight : usable);
-  const pageTopGap = (i) => (i === 0 ? 0 : metrics.marginTop);
 
   // Memoized (rather than a plain inline function) so React doesn't call it
   // with null-then-node again on every single render — a new function
@@ -125,18 +77,13 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
           independent copy of the same content, shifted up by that page's
           offset so only its slice shows through. */}
       <div className="paginated-resume-sheets">
-        {Array.from({ length: pageCount }, (_, i) => (
-          <div className="resume-sheet" key={i} style={{ height: pageHeight, background: metrics.background }}>
-            <div
-              className="resume-sheet-window"
-              style={{ height: pageWindowHeight(i), marginTop: pageTopGap(i) }}
-            >
-              <div className="resume-sheet-inner" style={{ transform: `translateY(-${pageSourceOffset(i)}px)` }}>
-                <ResumeContent />
-              </div>
+        {breaks.map((offset, i) => (
+          <div className="resume-sheet" key={i} style={{ height: pageHeight }}>
+            <div className="resume-sheet-inner" style={{ transform: `translateY(-${offset}px)` }}>
+              <ResumeContent />
             </div>
-            {pageCount > 1 && (
-              <div className="resume-sheet-number">{i + 1} / {pageCount}</div>
+            {breaks.length > 1 && (
+              <div className="resume-sheet-number">{i + 1} / {breaks.length}</div>
             )}
           </div>
         ))}

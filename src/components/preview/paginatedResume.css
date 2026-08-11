@@ -23,25 +23,8 @@
 .resume-sheet {
   position: relative;
   overflow: hidden;
-  /* Background is set inline per-render from the actual template's own
-     `.resume-page` background (see PaginatedResume.jsx) rather than hard-coded
-     white, so the blank top/bottom margin band on pages 2+ (see
-     .resume-sheet-window) blends with dark-background templates instead of
-     showing a white bar. This is just a fallback for the first paint, before
-     that measurement has run. */
   background: #fff;
   box-shadow: var(--shadow-paper);
-}
-
-/* The crop window for one page's slice of content. On page 1 this is the
-   full page height (its own padding already reads as margin). On page 2+ it
-   is shorter than the sheet and pushed down by `margin-top` (both set inline
-   per-page) so the same amount of blank space that frames every other edge
-   of the page also appears above and below a page break, instead of the
-   continued text starting flush against the sheet edge. */
-.resume-sheet-window {
-  position: relative;
-  overflow: hidden;
 }
 
 .resume-sheet-inner {

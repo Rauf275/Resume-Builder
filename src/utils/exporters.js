@@ -2,21 +2,12 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
 import { formatMonth, formatBirthDate, contactItems } from '../templates/sectionContent';
+import { PAGE_SIZE_PX } from '../hooks/useFitScale';
+import { computeContentBreakOffsets } from './paginate';
 
 function fileName(resume, ext) {
   const name = [resume.personal.firstName, resume.personal.lastName].filter(Boolean).join('-') || 'resume';
   return `${name.toLowerCase().replace(/\s+/g, '-')}.${ext}`;
-}
-
-// Parses a computed `rgb(...)`/`rgba(...)` color string into a [r, g, b]
-// array for jsPDF's setFillColor, which wants numeric channels rather than a
-// CSS color string. Falls back to white if the format is ever unrecognized
-// (e.g. `transparent`), rather than throwing mid-export.
-function parseRGB(colorStr) {
-  const m = colorStr && colorStr.match(/rgba?\(([^)]+)\)/);
-  if (!m) return [255, 255, 255];
-  const [r, g, b] = m[1].split(',').map((s) => parseFloat(s.trim()));
-  return [r || 0, g || 0, b || 0];
 }
 
 function download(blob, name) {
@@ -48,60 +39,49 @@ export async function exportPDF(node, resume, pageSize = 'A4') {
     // producing a crisp, print-quality PDF (2x is ~180dpi at these page sizes).
     // Desktops keep the higher-fidelity 2.5x since they have the headroom for it.
     const scale = window.innerWidth < 700 ? 2 : 2.5;
+
+    // Work out where each page is allowed to break *before* rasterizing —
+    // computeContentBreakOffsets reads the live, unrasterized DOM (the same
+    // source node the on-screen preview measures — see PaginatedResume.jsx),
+    // so the cut points always fall between sections/entries instead of
+    // through the middle of one. Previously this just rasterized the whole
+    // resume once and sliced the resulting image every `pageHeight` mm, with
+    // no idea what content lived at that Y position — that's what could
+    // split a section across the page boundary or leave a near-blank
+    // trailing page from rounding.
+    const pageSizePx = PAGE_SIZE_PX[pageSize] || PAGE_SIZE_PX.A4;
+    const nodeCssHeight = node.getBoundingClientRect().height;
+    const breaksPx = computeContentBreakOffsets(node, pageSizePx.height);
+
     const canvas = await html2canvas(node, { scale, useCORS: true, backgroundColor: '#ffffff' });
-    const imgData = canvas.toDataURL('image/jpeg', 0.96);
+    // Actual rasterized px per CSS px — should equal `scale`, but derived
+    // from the real canvas/node widths so any rounding html2canvas does
+    // internally doesn't drift the slice math below.
+    const pxPerCssPx = canvas.width / node.getBoundingClientRect().width;
 
     const pdf = new jsPDF({ unit: 'mm', format: pageSize.toLowerCase() === 'letter' ? 'letter' : 'a4' });
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+    const pageWidthMm = pdf.internal.pageSize.getWidth();
+    const mmPerCanvasPx = pageWidthMm / canvas.width;
 
-    const imgWidthMm = pageWidth;
-    const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
+    for (let i = 0; i < breaksPx.length; i += 1) {
+      const startPx = breaksPx[i];
+      const endPx = i + 1 < breaksPx.length ? breaksPx[i + 1] : nodeCssHeight;
+      const sy = Math.round(startPx * pxPerCssPx);
+      const sh = Math.max(1, Math.round((endPx - startPx) * pxPerCssPx));
 
-    // Page 1 needs no adjustment — the resume's own top/bottom padding
-    // already reads as margin there. Every page after that used to be cut at
-    // a raw pageHeight multiple with no such padding, jamming continued text
-    // against the page edge — the same crop-boundary issue the live preview
-    // has (see PaginatedResume.jsx, which this mirrors so the PDF keeps
-    // matching what was previewed). Reserve that same padding as blank
-    // margin around every page break here too: measure it from the rendered
-    // `.resume-page`, convert from its CSS px to PDF mm using the image's own
-    // px→mm scale, then leave that much space at the top and bottom of every
-    // page after the first.
-    const pageEl = node.querySelector('.resume-page') || node;
-    const pageStyle = getComputedStyle(pageEl);
-    const pxToMm = imgWidthMm / node.getBoundingClientRect().width;
-    const marginTopMm = (parseFloat(pageStyle.paddingTop) || 0) * pxToMm;
-    const marginBottomMm = (parseFloat(pageStyle.paddingBottom) || 0) * pxToMm;
-    const usableMm = Math.max(1, pageHeight - marginTopMm - marginBottomMm);
-    const bg = parseRGB(pageStyle.backgroundColor);
+      const pageCanvas = document.createElement('canvas');
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = sh;
+      const ctx = pageCanvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+      ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
 
-    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidthMm, imgHeightMm);
-    let coveredMm = pageHeight;
+      const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.96);
+      const pageImgHeightMm = sh * mmPerCanvasPx;
 
-    // Sub-millimeter tolerance: without it, an image whose height lands even
-    // a hair over an exact multiple of usableMm (easy to happen from
-    // rounding in the canvas → mm conversion above) would trigger one more
-    // near-blank trailing page in the PDF.
-    const PAGE_OVERFLOW_TOLERANCE_MM = 1;
-    while (imgHeightMm - coveredMm > PAGE_OVERFLOW_TOLERANCE_MM) {
-      pdf.addPage();
-      // Shifts the (whole, unmodified) image up so that content starting at
-      // `coveredMm` in the source lands at `marginTopMm` from this page's
-      // top edge — the same offset math PaginatedResume.jsx uses for the
-      // on-screen crop window.
-      const position = marginTopMm - coveredMm;
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
-      // The position shift alone isn't enough: rows from the *previous*
-      // page's tail can still land inside this page's top margin band (and,
-      // on the last page, rows past the real content can land in the bottom
-      // band). Painting over both bands with the page's own background color
-      // blanks them cleanly, matching the preview's actual blank gap instead
-      // of leaking a sliver of duplicated text into it.
-      pdf.setFillColor(...bg);
-      pdf.rect(0, 0, pageWidth, marginTopMm, 'F');
-      pdf.rect(0, pageHeight - marginBottomMm, pageWidth, marginBottomMm, 'F');
-      coveredMm += usableMm;
+      if (i > 0) pdf.addPage();
+      pdf.addImage(pageImgData, 'JPEG', 0, 0, pageWidthMm, pageImgHeightMm);
     }
 
     pdf.save(fileName(resume, 'pdf'));
