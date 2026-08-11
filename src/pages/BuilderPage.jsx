@@ -19,12 +19,37 @@ import { useFitScale, PAGE_SIZE_PX } from '../hooks/useFitScale';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import './builder.css';
 
-function ExportMenu({ open, onToggle, onClose, menuRef, resume, sectionOrder, hiddenSections, customization, previewRef, className = '' }) {
+// `align` controls which edge the dropdown hangs from: 'left' (mobile, anchored to the
+// button's left edge) or 'right' (desktop, anchored to the button's right edge).
+function ExportMenu({ open, onToggle, onClose, menuRef, resume, sectionOrder, hiddenSections, customization, previewRef, className = '', align = 'left' }) {
+  // The dropdown is positioned with `position: fixed` and coordinates computed here,
+  // rather than `position: absolute` anchored to its own parent. Reason: the mobile
+  // instance of this button lives inside `.toolbar-scroll`, which sets `overflow-x: auto`
+  // — per the CSS spec that forces the paired `overflow-y` to also compute as `auto`
+  // (rather than the default `visible`), so the parent silently becomes a clipping
+  // container. An `absolute`-positioned dropdown taller than the 56px toolbar row was
+  // being clipped there, making it invisible even though `open` was true. `fixed`
+  // positioning escapes that ancestor clipping (no ancestor here sets `transform` /
+  // `filter`, which would otherwise trap it), so this fixes it for both variants.
+  const [menuStyle, setMenuStyle] = useState(null);
+
+  useEffect(() => {
+    if (!open) { setMenuStyle(null); return; }
+    const wrap = menuRef.current;
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    setMenuStyle(
+      align === 'right'
+        ? { position: 'fixed', top: rect.bottom + 8, right: window.innerWidth - rect.right }
+        : { position: 'fixed', top: rect.bottom + 8, left: rect.left }
+    );
+  }, [open, menuRef, align]);
+
   return (
     <div className={`export-menu-wrap ${className}`} ref={menuRef}>
       <Button variant="accent" size="sm" icon={Download} onClick={onToggle}>Export</Button>
-      {open && (
-        <div className="export-menu">
+      {open && menuStyle && (
+        <div className="export-menu" style={menuStyle}>
           <button onClick={() => { exportPDF(previewRef.current, resume, customization.pageSize); onClose(); }}>
             <FileText size={14} /> PDF
           </button>
@@ -144,6 +169,7 @@ export default function BuilderPage() {
               mobile users reach for most. Hidden on desktop, where Export lives pinned right. */}
           <ExportMenu
             className="export-menu-mobile"
+            align="left"
             open={exportOpen}
             onToggle={() => setExportOpen((o) => !o)}
             onClose={() => setExportOpen(false)}
@@ -171,6 +197,7 @@ export default function BuilderPage() {
         <div className="toolbar-end">
           <ExportMenu
             className="export-menu-desktop"
+            align="right"
             open={exportOpen}
             onToggle={() => setExportOpen((o) => !o)}
             onClose={() => setExportOpen(false)}
