@@ -20,6 +20,12 @@ import './paginatedResume.css';
 // re-flow, which is exactly what the raster PDF export does too. That keeps
 // preview and PDF output pixel-for-pixel consistent, and it works for every
 // template without any of them needing to know about pagination.
+//
+// A page is only added once content genuinely overflows the previous one —
+// see the OVERFLOW_TOLERANCE_PX note below for why a plain height/pageHeight
+// comparison isn't enough to guarantee that on its own.
+const OVERFLOW_TOLERANCE_PX = 3;
+
 const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
   const customization = useUIStore((s) => s.customization);
   const pageSizePx = PAGE_SIZE_PX[customization.pageSize] || PAGE_SIZE_PX.A4;
@@ -33,8 +39,20 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
     if (!el) return;
 
     function recalc() {
-      const contentHeight = el.scrollHeight;
-      setPageCount(Math.max(1, Math.ceil(contentHeight / pageHeight)));
+      // getBoundingClientRect gives the real, fractional rendered height.
+      // scrollHeight (used originally) is rounded to a whole pixel by the
+      // browser, and `.resume-page`'s `min-height: 297mm` sits so close to
+      // that exact page height that the rounding alone was enough to tip
+      // scrollHeight a fraction of a pixel past pageHeight — which made
+      // Math.ceil() report a second page for basically every resume, even
+      // ones with plenty of room left on page one.
+      const contentHeight = el.getBoundingClientRect().height;
+      // A few px of tolerance absorbs that kind of rounding/sub-pixel jitter
+      // (and things like a barely-open text cursor) without masking a real
+      // overflow, which is always much bigger than a few pixels — a whole
+      // extra line of text, at minimum.
+      const overflow = Math.max(0, contentHeight - pageHeight - OVERFLOW_TOLERANCE_PX);
+      setPageCount(1 + Math.ceil(overflow / pageHeight));
     }
 
     recalc();

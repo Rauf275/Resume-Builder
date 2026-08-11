@@ -53,7 +53,12 @@ export async function exportPDF(node, resume, pageSize = 'A4') {
     pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
     heightLeft -= pageHeight;
 
-    while (heightLeft > 0) {
+    // Sub-millimeter tolerance: without it, an image whose height lands even
+    // a hair over an exact multiple of pageHeight (easy to happen from
+    // rounding in the canvas → mm conversion above) would trigger one more
+    // near-blank trailing page in the PDF.
+    const PAGE_OVERFLOW_TOLERANCE_MM = 1;
+    while (heightLeft > PAGE_OVERFLOW_TOLERANCE_MM) {
       position = heightLeft - imgHeightMm;
       pdf.addPage();
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidthMm, imgHeightMm);
