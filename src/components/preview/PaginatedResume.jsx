@@ -30,6 +30,20 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
   const pageHeight = pageSizePx.height;
 
   const [breaks, setBreaks] = useState([0]);
+  // The physical sheet behind each page (`.resume-sheet` in
+  // paginatedResume.css) used to be hardcoded to white. That's invisible for
+  // every light-background template, but templates with their own page
+  // background (e.g. Dark Slate's near-black page) only paint that color
+  // inside the actual rendered content — the continuation-page top gap (a
+  // deliberately content-free spacer, see below) and any leftover space on a
+  // short trailing page both sit *outside* that content, on the bare sheet,
+  // so they showed through as a white strip between/around pages instead of
+  // matching the template. Reading the real page's own computed background
+  // here and feeding it back in as a CSS variable keeps the sheet in sync
+  // with whatever the current template (or a future one) actually paints,
+  // instead of duplicating each template's color as a second hardcoded
+  // value that could drift out of sync with its stylesheet.
+  const [pageBg, setPageBg] = useState('#fff');
   const sourceRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -38,6 +52,8 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
 
     function recalc() {
       setBreaks(computeContentBreakOffsets(el, pageHeight));
+      const pageEl = el.querySelector('.resume-page');
+      if (pageEl) setPageBg(getComputedStyle(pageEl).backgroundColor);
     }
 
     recalc();
@@ -120,7 +136,7 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
           to the narrower of the two heights removes that overlap; any
           leftover space below a page's real content is just blank, same as
           a printed page whose next section didn't quite fit. */}
-      <div className="paginated-resume-sheets">
+      <div className="paginated-resume-sheets" style={{ '--res-sheet-bg': pageBg }}>
         {breaks.map((offset, i) => {
           const nextOffset = i + 1 < breaks.length ? breaks[i + 1] : null;
           // Page 1 starts right at the top of its sheet — it already gets

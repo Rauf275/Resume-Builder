@@ -23,7 +23,13 @@
 .resume-sheet {
   position: relative;
   overflow: hidden;
-  background: #fff;
+  /* Matches the current template's actual page background (set as
+     --res-sheet-bg by PaginatedResume.jsx from the rendered .resume-page),
+     falling back to white before that measurement runs on first paint.
+     This is what the continuation-page gap and any blank trailing space
+     show through to, so a dark (or any non-white) template never flashes a
+     white strip between or around its pages. */
+  background: var(--res-sheet-bg, #fff);
   box-shadow: var(--shadow-paper);
 }
 
