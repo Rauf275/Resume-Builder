@@ -27,17 +27,27 @@
   box-shadow: var(--shadow-paper);
 }
 
-/* Constrains visible content to this page's actual slice (this page's
-   offset up to the next page's offset), independently of the outer sheet's
-   full pageHeight — see the comment in PaginatedResume.jsx for why this
-   second clip is required. */
+/* Outer wrapper sized to this page's actual slice height (offset gap +
+   content). Deliberately does NOT clip — clipping happens only in
+   .resume-sheet-crop below, so the reserved gap strip is never part of any
+   overflow:hidden region and can't have content bleed into it. */
 .resume-sheet-clip {
-  overflow: hidden;
-  /* border-box so a continuation page's inline padding-top (the blank gap
-     above its content — see PaginatedResume.jsx) is counted inside the
-     height that's already been sized to fit the page, instead of adding on
-     top of it and pushing content past pageHeight. */
   box-sizing: border-box;
+}
+
+/* Genuinely empty spacer for a continuation page's top margin — a real
+   sibling block, not padding on a clipped box. See the comment in
+   PaginatedResume.jsx for why that distinction matters. */
+.resume-sheet-gap {
+  flex-shrink: 0;
+}
+
+/* The actual clip: sized to exactly this page's content height and
+   positioned (via normal flow, after the gap spacer) so its clip region
+   never overlaps the gap strip above it. */
+.resume-sheet-crop {
+  overflow: hidden;
+  position: relative;
 }
 
 .resume-sheet-inner {

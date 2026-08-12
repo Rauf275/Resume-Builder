@@ -145,11 +145,30 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
           const clipHeight = nextOffset != null
             ? Math.max(1, Math.min(pageHeight, (nextOffset - offset) + gap))
             : pageHeight;
+          // The gap above is a real, content-free spacer (a plain sibling
+          // div with no children) rather than padding-top on the
+          // overflow:hidden clip box. padding-top on a clipped box doesn't
+          // create truly empty space for a translateY-shifted child: the
+          // overflow clip region is the box's full padding box, so it
+          // still includes the padding-top strip, and the transformed
+          // .resume-sheet-inner's *layout* top sits right after that
+          // padding regardless of the transform — only its paint position
+          // moves. The result was that pixels belonging to the *previous*
+          // page (content between offset-gap and offset) painted into that
+          // reserved top strip and showed through, since the clip never
+          // actually excluded that strip. Giving the gap its own
+          // non-clipping spacer, and clipping only in a separate
+          // `.resume-sheet-crop` sized to exactly the content height,
+          // means the clip region no longer overlaps the gap area at all.
+          const cropHeight = Math.max(1, clipHeight - gap);
           return (
             <div className="resume-sheet" key={i} style={{ height: pageHeight }}>
-              <div className="resume-sheet-clip" style={{ height: clipHeight, paddingTop: gap }}>
-                <div className="resume-sheet-inner" style={{ transform: `translateY(-${offset}px)` }}>
-                  <ResumeContent />
+              <div className="resume-sheet-clip" style={{ height: clipHeight }}>
+                {gap > 0 && <div className="resume-sheet-gap" style={{ height: gap }} />}
+                <div className="resume-sheet-crop" style={{ height: cropHeight }}>
+                  <div className="resume-sheet-inner" style={{ transform: `translateY(-${offset}px)` }}>
+                    <ResumeContent />
+                  </div>
                 </div>
               </div>
               {breaks.length > 1 && (
