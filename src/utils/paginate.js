@@ -111,11 +111,37 @@ function unitsFromRoot(root, rootRect) {
 // since that's where its first entry starts), and it's what makes the
 // tight-budget case above split cleanly between entries instead of wasting
 // the rest of the page.
+//
+// A handful of section types (Skills/Interests tag pills, Languages,
+// contact lists) render their content as ONE wrapper div holding many small
+// items, rather than several sibling `.res-item`/`.entry-card` blocks — so
+// the check below (`kids.length > 1`) never fires for them, and the whole
+// list was being treated as a single unsplittable unit. That's harmless
+// when the list is short, but once it was too tall to fit in whatever
+// budget was left on a page, the *entire* list (and every section after
+// it, since nothing safe existed in between) got deferred whole to the
+// next page — leaving a large unused strip at the bottom of the page it
+// didn't fit on, most visible in a sidebar column, whose own content is
+// often exactly this kind of list. Recognizing these specific wrapper
+// classes lets a break land BETWEEN two tags/list rows instead, the same
+// way it's already allowed to land between two Experience/Education
+// entries.
+const LIST_WRAPPER_CLASSES = ['res-tags', 'res-lang-list', 'res-contact-list', 'res-contact-row'];
+
 function expandMultiEntryUnits(units, rootRect) {
   const expanded = [];
   units.forEach((u) => {
     if (u.el) {
-      const kids = Array.from(u.el.children).filter((c) => !c.classList.contains('res-section-title'));
+      let kids = Array.from(u.el.children).filter((c) => !c.classList.contains('res-section-title'));
+      // Only reach one level deeper when that single child is a recognized
+      // list wrapper — never for a section whose one child is a single
+      // `.res-item`/`.entry-card` (e.g. one Education entry), where the
+      // "children" are that entry's own title/date/description parts and
+      // must stay glued together as one unsplittable block.
+      if (kids.length === 1 && LIST_WRAPPER_CLASSES.some((cls) => kids[0].classList.contains(cls))) {
+        const inner = Array.from(kids[0].children);
+        if (inner.length > 1) kids = inner;
+      }
       if (kids.length > 1) {
         const kidRects = kids.map((k) => {
           const r = k.getBoundingClientRect();
