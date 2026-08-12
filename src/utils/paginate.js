@@ -44,7 +44,7 @@ const TOLERANCE_PX = 3;
 // top breathing room from the template's own page padding — so its budget
 // stays the full pageHeight. Exported so PaginatedResume.jsx and the PDF
 // exporter both size the gap identically instead of each guessing a value.
-export const CONTINUATION_TOP_GAP_PX = 40;
+export const CONTINUATION_TOP_GAP_PX = 0;
 
 function unitsFromRoot(root, rootRect) {
   const titles = Array.from(root.querySelectorAll('.res-section-title'));

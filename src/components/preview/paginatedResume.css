@@ -17,7 +17,7 @@
 .paginated-resume-sheets {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 0;
 }
 
 .resume-sheet {
