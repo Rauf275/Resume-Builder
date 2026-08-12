@@ -21,10 +21,13 @@
 //    breakable "unit" — normally never split.
 // 2. Whatever sits above the first section (name/photo/contact header) is
 //    an implicit leading unit — always kept with page 1's start.
-// 3. If a single section is itself taller than one full page (a long
-//    Experience list, for example), it's expanded into its own direct
+// 3. Any section with more than one entry (a multi-job Experience list, a
+//    multi-school Education list, ...) is expanded into its own direct
 //    children so the break can fall between entries instead of forcing the
-//    whole section onto one unsplittable block.
+//    whole section onto one unsplittable block — this applies regardless of
+//    whether the section as a whole is taller than a page, since what
+//    matters is whether it fits in whatever budget is left on the current
+//    page, not against a full page in isolation.
 // 4. A candidate Y is only used as a break if it doesn't fall inside *any*
 //    unit's vertical range. This also makes multi-column/sidebar templates
 //    safe: a cut only happens where it doesn't slice through content in
@@ -52,28 +55,81 @@ function unitsFromRoot(root, rootRect) {
   const units = titles.map((title) => {
     const block = title.closest('section') || title.parentElement || title;
     const r = block.getBoundingClientRect();
-    return { top: r.top - rootRect.top, bottom: r.bottom - rootRect.top, el: block };
+    return { top: r.top - rootRect.top, bottom: r.bottom - rootRect.top, el: block, parent: block.parentElement };
   });
 
-  const earliestTop = Math.min(...units.map((u) => u.top));
-  if (earliestTop > TOLERANCE_PX) {
-    units.push({ top: 0, bottom: earliestTop });
-  }
+  // The space above a column's first titled section (a sidebar's photo/name/
+  // contact block, or a main column's own lead-in) has no `.res-section-title`
+  // of its own, so nothing above marks it as a protected unit — it used to be
+  // covered by a single "leading unit" sized from the SHORTEST such gap across
+  // every column (Math.min over every unit's top). That's wrong for a
+  // multi-column template like Modern: the sidebar's header (photo, name,
+  // contacts) runs much deeper than the main column's, which can start almost
+  // immediately with its first section title ("About"). Using the main
+  // column's short gap as the *only* protected leading region left the
+  // sidebar's own, much taller, un-sectioned header completely unprotected —
+  // a break could land right after that tiny shared gap and slice straight
+  // through the sidebar's photo/name/contacts block, stranding it on the next
+  // page while page 1 rendered as basically blank. Computing one leading unit
+  // PER column (grouped by each section's shared DOM parent, which is the
+  // column's own container) instead means every column's own header is
+  // protected using that column's own earliest title, regardless of how much
+  // shorter another column's header is.
+  const groups = new Map();
+  units.forEach((u) => {
+    if (!groups.has(u.parent)) groups.set(u.parent, []);
+    groups.get(u.parent).push(u);
+  });
+  groups.forEach((groupUnits) => {
+    const earliestTop = Math.min(...groupUnits.map((u) => u.top));
+    if (earliestTop > TOLERANCE_PX) {
+      units.push({ top: 0, bottom: earliestTop });
+    }
+  });
 
   return units;
 }
 
-function expandOversizedUnits(units, pageHeight, rootRect) {
+// Splits any section that has more than one entry (Experience, Education,
+// Certificates, ...) into one unit per entry, so a break can land between
+// entries instead of being forced to treat the whole section as one
+// unsplittable block.
+//
+// This used to only kick in once a section's total height exceeded a full
+// page — reasonable-sounding, but wrong: what actually matters isn't a
+// section's height against a FULL page, it's its height against whatever
+// budget is LEFT on the page a break is being attempted on. A section that's
+// merely a bit shorter than a full page (say, three Education entries just
+// under 1050px, next to a ~1122px page) will almost never fit in the space
+// that's actually left after a header or a previous section already ate
+// into that page's budget — so it still can't be kept as one block, and
+// with no per-entry units to fall back on, the whole section (and
+// everything after it, since nothing "safe" exists in between) got pushed
+// to the next page, leaving the current one mostly blank. Expanding every
+// multi-entry section unconditionally removes that gap: it costs nothing
+// when a section DOES fit as one block (its own top is still a candidate,
+// since that's where its first entry starts), and it's what makes the
+// tight-budget case above split cleanly between entries instead of wasting
+// the rest of the page.
+function expandMultiEntryUnits(units, rootRect) {
   const expanded = [];
   units.forEach((u) => {
-    const height = u.bottom - u.top;
-    if (height > pageHeight && u.el) {
+    if (u.el) {
       const kids = Array.from(u.el.children).filter((c) => !c.classList.contains('res-section-title'));
       if (kids.length > 1) {
-        kids.forEach((k) => {
+        const kidRects = kids.map((k) => {
           const r = k.getBoundingClientRect();
-          expanded.push({ top: r.top - rootRect.top, bottom: r.bottom - rootRect.top });
+          return { top: r.top - rootRect.top, bottom: r.bottom - rootRect.top };
         });
+        // Keep the section's heading glued to its first entry — without
+        // this, the gap between the title and the first child would be
+        // unprotected, and a break could land there and strand the heading
+        // alone at the bottom of a page with none of its own content.
+        const firstChildTop = kidRects[0].top;
+        if (firstChildTop > u.top + TOLERANCE_PX) {
+          expanded.push({ top: u.top, bottom: firstChildTop });
+        }
+        kidRects.forEach((r) => expanded.push(r));
         return;
       }
     }
@@ -92,7 +148,7 @@ export function computeContentBreakOffsets(root, pageHeight) {
   const totalHeight = rootRect.height;
   if (totalHeight - pageHeight <= TOLERANCE_PX) return [0];
 
-  const units = expandOversizedUnits(unitsFromRoot(root, rootRect), pageHeight, rootRect);
+  const units = expandMultiEntryUnits(unitsFromRoot(root, rootRect), rootRect);
 
   function isSafe(y) {
     return !units.some((u) => y > u.top + TOLERANCE_PX && y < u.bottom - TOLERANCE_PX);

@@ -1,4 +1,5 @@
 import { forwardRef, useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import ResumeContent from './ResumeContent';
 import { useUIStore } from '../../store/useUIStore';
 import { PAGE_SIZE_PX } from '../../hooks/useFitScale';
@@ -68,10 +69,34 @@ const PaginatedResume = forwardRef(function PaginatedResume(_, ref) {
           (PDF/HTML) and the height measurement above both read from. Its
           wrapper is positioned off-screen (not display:none/visibility:hidden
           — those would also make html2canvas render it blank) so it never
-          affects the visible layout but is still fully paintable for export. */}
-      <div className="paginated-resume-source-wrap" aria-hidden="true">
-        <ResumeContent ref={setSourceRefs} />
-      </div>
+          affects the visible layout but is still fully paintable for export.
+
+          Portaled straight to <body> rather than rendered in place: the
+          preview wraps everything (this source copy included) in a
+          `.preview-zoom-wrap` that carries a `transform: scale(...)` for the
+          on-screen zoom/fit level. Per the CSS spec, an ancestor with ANY
+          transform (even scale(1)) becomes the containing block for its
+          `position: fixed` descendants — so without the portal, this node's
+          "fixed" positioning silently stopped being relative to the real
+          viewport and started being relative to that scaled wrapper instead,
+          and its on-screen box (what getBoundingClientRect(), and therefore
+          computeContentBreakOffsets, actually measures) got scaled down right
+          along with it. That's harmless-looking at 100% desktop zoom (scale
+          is 1, nothing visibly shrinks), but the mobile fullscreen preview
+          fits a 793px-wide page into a ~390px screen with a scale well under
+          1 — so the "canonical" copy was being measured at roughly half its
+          real size there, the resulting page count came out lower than the
+          PDF's, and it silently drifted further from the export on any
+          desktop zoom level too. Portaling to <body> — outside every
+          transformed ancestor — keeps this copy's real viewport-fixed
+          position and true, unscaled page width no matter what zoom level
+          the visible sheets are rendered at. */}
+      {createPortal(
+        <div className="paginated-resume-source-wrap" aria-hidden="true">
+          <ResumeContent ref={setSourceRefs} />
+        </div>,
+        document.body
+      )}
 
       {/* Visible sheets: one per page, each a fixed-height window onto an
           independent copy of the same content, shifted up by that page's
